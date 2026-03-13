@@ -11,9 +11,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.room.Room;
+
 import android.widget.Toast;
 
 import com.hoiaebtl.antispam_call_android.R;
+import com.hoiaebtl.antispam_call_android.data.database.AppDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,6 +27,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // Start database
+        AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "database-name").allowMainThreadQueries().build();
+
+        // gọi thử database
+        db.userDao().getAllUsers();
 
         // Ngay khi mở app lên, gọi hàm kiểm tra và xin quyền
         checkAndRequestPermissions();
