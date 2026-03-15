@@ -1,15 +1,23 @@
+# IDE cấu hình - Chặn toàn bộ thư mục .idea
+.idea/
 *.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
+*.iws
+*.ipr
+
+# Các file build tự động
 /build
-/captures
-.externalNativeBuild
-.cxx
+.gradle/
+gen/
+
+# File cấu hình máy cá nhân (chứa đường dẫn SDK cục bộ)
 local.properties
+
+# File tạm của hệ điều hành
+.DS_Store
+Thumbs.db
+
+# Các file log và tạm khác
+captures/
+.externalNativeBuild/
+.cxx/
+*.log
