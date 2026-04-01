@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!-- PHẦN 1: BANNER NHỎ (COLLAPSED) - Hiện ngay khi có cuộc gọi -->
+    <LinearLayout
+        android:id="@+id/layout_collapsed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FF1744"
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:gravity="center_vertical"
+        android:elevation="8dp"
+        android:visibility="visible">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@android:drawable/stat_sys_warning"
+            android:tint="#FFFFFF" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PHÁT HIỆN LỪA ĐẢO!"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_spam_number_small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Số: 0123..."
+                android:textColor="#EEEEEE"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CHI TIẾT >"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <!-- PHẦN 2: CẢNH BÁO CHI TIẾT (EXPANDED) - Hiện khi nhấn vào Banner -->
+    <LinearLayout
+        android:id="@+id/layout_expanded"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#D50000"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:src="@android:drawable/ic_dialog_alert"
+            android:tint="#FFFFFF" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CẢNH BÁO NGUY HIỂM"
+            android:textColor="#FFFFFF"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp" />
+
+        <TextView
+            android:id="@+id/tv_spam_number_full"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Số: 0123456789"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đây là số điện thoại đã bị báo cáo lừa đảo nhiều lần. Vui lòng không cung cấp thông tin cá nhân hoặc mã OTP."
+            android:textColor="#FFCDD2"
+            android:textAlignment="center"
+            android:layout_marginTop="16dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="24dp">
+
+            <Button
+                android:id="@+id/btn_close_full"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ĐÃ HIỂU"
+                android:backgroundTint="#FFFFFF"
+                android:textColor="#D50000" />
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>
