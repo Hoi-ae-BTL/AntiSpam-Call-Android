@@ -1,117 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="12dp">
 
-    <!-- PHẦN 1: BANNER NHỎ (COLLAPSED) - Hiện ngay khi có cuộc gọi -->
-    <LinearLayout
-        android:id="@+id/layout_collapsed"
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FF1744"
-        android:orientation="horizontal"
-        android:padding="12dp"
-        android:gravity="center_vertical"
-        android:elevation="8dp"
-        android:visibility="visible">
-
-        <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@android:drawable/stat_sys_warning"
-            android:tint="#FFFFFF" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginStart="12dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="PHÁT HIỆN LỪA ĐẢO!"
-                android:textColor="#FFFFFF"
-                android:textStyle="bold"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/tv_spam_number_small"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Số: 0123..."
-                android:textColor="#EEEEEE"
-                android:textSize="12sp" />
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="CHI TIẾT >"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:textSize="12sp" />
-    </LinearLayout>
-
-    <!-- PHẦN 2: CẢNH BÁO CHI TIẾT (EXPANDED) - Hiện khi nhấn vào Banner -->
-    <LinearLayout
-        android:id="@+id/layout_expanded"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#D50000"
-        android:orientation="vertical"
-        android:padding="24dp"
-        android:gravity="center"
-        android:visibility="gone">
-
-        <ImageView
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:src="@android:drawable/ic_dialog_alert"
-            android:tint="#FFFFFF" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="CẢNH BÁO NGUY HIỂM"
-            android:textColor="#FFFFFF"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp" />
-
-        <TextView
-            android:id="@+id/tv_spam_number_full"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Số: 0123456789"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp"
-            android:layout_marginTop="8dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Đây là số điện thoại đã bị báo cáo lừa đảo nhiều lần. Vui lòng không cung cấp thông tin cá nhân hoặc mã OTP."
-            android:textColor="#FFCDD2"
-            android:textAlignment="center"
-            android:layout_marginTop="16dp" />
+        app:cardCornerRadius="28dp"
+        app:cardElevation="10dp"
+        app:strokeWidth="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginTop="24dp">
+            android:background="@drawable/bg_spam_gradient"
+            android:orientation="vertical"
+            android:padding="20dp">
 
-            <Button
-                android:id="@+id/btn_close_full"
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <!-- Icon Container -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/icon_container"
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    app:cardBackgroundColor="#50FFFFFF"
+                    app:cardCornerRadius="26dp"
+                    app:strokeWidth="0dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="14dp"
+                        android:src="@android:drawable/ic_delete"
+                        app:tint="@android:color/white" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="16dp"
+                    android:layout_toEndOf="@id/icon_container"
+                    android:layout_toStartOf="@id/btn_close_overlay"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_spam_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Lừa đảo bảo hiểm"
+                        android:textColor="@android:color/white"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_report_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="3509 Báo cáo"
+                        android:textColor="#F5F5F5"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <ImageButton
+                    android:id="@+id/btn_close_overlay"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_alignParentEnd="true"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@android:drawable/ic_menu_close_clear_cancel"
+                    app:tint="@android:color/white" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="16dp"
+                android:background="#30FFFFFF" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_spam_number"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="+84 123 456 789"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:letterSpacing="0.02"
+                    android:textStyle="normal" />
+
+                <!-- Badge CUỘC GỌI RÁC -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_badge_white"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="5dp"
+                    android:text="CUỘC GỌI RÁC"
+                    android:textColor="#E57373"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="ĐÃ HIỂU"
-                android:backgroundTint="#FFFFFF"
-                android:textColor="#D50000" />
-        </LinearLayout>
-    </LinearLayout>
+                android:layout_marginTop="6dp"
+                android:text="TP. Hồ Chí Minh, Việt Nam"
+                android:textColor="#E0FFFFFF"
+                android:textSize="12sp" />
 
-</FrameLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+</LinearLayout>
