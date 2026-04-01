@@ -2,16 +2,18 @@ package com.hoiaebtl.antispam_call_android.data.entity;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 @Entity(
-        tableName = "SpamNumbers",
+        tableName = "SpamNumbers"
+        // Tạm thời gỡ bỏ ForeignKey để người dùng có thể thêm số test trực tiếp
+        /*
         foreignKeys = @ForeignKey(
                 entity = Category.class,
                 parentColumns = "category_id",
                 childColumns = "primary_category_id"
         )
+        */
 )
 public class SpamNumber {
 

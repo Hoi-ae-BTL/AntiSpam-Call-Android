@@ -16,7 +16,8 @@ import com.hoiaebtl.antispam_call_android.data.entity.*;
                 BlockRule.class,
                 CallLog.class
         },
-        version = 1
+        version = 3, // Tăng version lên 3
+        exportSchema = false
 )
 public abstract class AppDatabase extends RoomDatabase {
 

@@ -7,43 +7,91 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.room.Room;
-
-import android.widget.Toast;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.hoiaebtl.antispam_call_android.R;
-import com.hoiaebtl.antispam_call_android.data.database.AppDatabase;
 import com.hoiaebtl.antispam_call_android.core.CallListenService;
+import com.hoiaebtl.antispam_call_android.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final int PERMISSION_REQUEST_CODE = 100;
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        // Start database
-        AppDatabase db = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "database-name").allowMainThreadQueries().build();
+        
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        // gọi thử database
-        db.userDao().getAllUsers();
+        // Hiển thị HomeFragment mặc định khi mới mở app
+        if (savedInstanceState == null) {
+            loadFragment(new HomeFragment());
+        }
 
-        // Kiểm tra và xin quyền
+        // Xử lý sự kiện click trên Bottom Navigation
+        binding.bottomNavigation.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            Fragment selectedFragment = null;
+
+            if (itemId == R.id.navigation_home) {
+                selectedFragment = new HomeFragment();
+            } else if (itemId == R.id.navigation_blacklist) {
+                selectedFragment = new BlacklistFragment();
+            } else if (itemId == R.id.navigation_logs) {
+                // selectedFragment = new LogsFragment(); // Nếu đã có
+                Toast.makeText(this, "Tính năng Nhật ký đang phát triển", Toast.LENGTH_SHORT).show();
+            } else if (itemId == R.id.navigation_stats) {
+                // selectedFragment = new StatsFragment(); // Nếu đã có
+                Toast.makeText(this, "Tính năng Thống kê đang phát triển", Toast.LENGTH_SHORT).show();
+            }
+
+            if (selectedFragment != null) {
+                loadFragment(selectedFragment);
+                return true;
+            }
+            return false;
+        });
+
         checkAndRequestPermissions();
     }
 
+    private void loadFragment(Fragment fragment) {
+        try {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.nav_host_fragment, fragment)
+                    .setReorderingAllowed(true)
+                    .commit();
+            Log.d("MainActivity", "Đã chuyển sang Fragment: " + fragment.getClass().getSimpleName());
+        } catch (Exception e) {
+            Log.e("MainActivity", "Lỗi chuyển Fragment: " + e.getMessage());
+        }
+    }
+
     private void checkAndRequestPermissions() {
-        String[] permissions = {
-                Manifest.permission.READ_PHONE_STATE,
-                Manifest.permission.READ_CALL_LOG,
-                Manifest.permission.ANSWER_PHONE_CALLS
-        };
+        String[] permissions;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            permissions = new String[]{
+                    Manifest.permission.READ_PHONE_STATE,
+                    Manifest.permission.READ_CALL_LOG,
+                    Manifest.permission.ANSWER_PHONE_CALLS
+            };
+        } else {
+            permissions = new String[]{
+                    Manifest.permission.READ_PHONE_STATE,
+                    Manifest.permission.READ_CALL_LOG
+            };
+        }
 
         boolean needRequest = false;
         for (String p : permissions) {
@@ -56,14 +104,11 @@ public class MainActivity extends AppCompatActivity {
         if (needRequest) {
             ActivityCompat.requestPermissions(this, permissions, PERMISSION_REQUEST_CODE);
         } else {
-            // Nếu đã có quyền, khởi động Service luôn
             startCoreService();
         }
 
-        // Xin quyền Overlay (Cần cho module của Tuấn)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!Settings.canDrawOverlays(this)) {
-                Toast.makeText(this, "Vui lòng cấp quyền 'Hiển thị trên ứng dụng khác'", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                         Uri.parse("package:" + getPackageName()));
                 startActivity(intent);
@@ -73,10 +118,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void startCoreService() {
         Intent serviceIntent = new Intent(this, CallListenService.class);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(serviceIntent);
-        } else {
-            startService(serviceIntent);
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(serviceIntent);
+            } else {
+                startService(serviceIntent);
+            }
+        } catch (Exception e) {
+            Log.e("MainActivity", "Không thể khởi chạy Service: " + e.getMessage());
         }
     }
 
@@ -91,12 +140,8 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 }
             }
-
             if (allGranted) {
-                Toast.makeText(this, "Đã cấp đủ quyền. Khởi động bảo vệ...", Toast.LENGTH_SHORT).show();
                 startCoreService();
-            } else {
-                Toast.makeText(this, "App cần các quyền này để hoạt động ổn định.", Toast.LENGTH_LONG).show();
             }
         }
     }
