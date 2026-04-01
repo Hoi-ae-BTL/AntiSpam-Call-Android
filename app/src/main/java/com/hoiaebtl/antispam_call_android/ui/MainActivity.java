@@ -17,12 +17,12 @@ import android.widget.Toast;
 
 import com.hoiaebtl.antispam_call_android.R;
 import com.hoiaebtl.antispam_call_android.data.database.AppDatabase;
+import com.hoiaebtl.antispam_call_android.core.CallListenService;
 
 public class MainActivity extends AppCompatActivity {
 
-    // Mã định danh để nhận biết kết quả trả về khi người dùng bấm "Cho phép"
     private static final int PERMISSION_REQUEST_CODE = 100;
-    private com.hoiaebtl.antispam_call_android.core.CallReceiver callReceiver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,28 +34,11 @@ public class MainActivity extends AppCompatActivity {
         // gọi thử database
         db.userDao().getAllUsers();
 
-        // Ngay khi mở app lên, gọi hàm kiểm tra và xin quyền
+        // Kiểm tra và xin quyền
         checkAndRequestPermissions();
-    }
-    @Override
-    protected void onStart() {
-        super.onStart();
-        // Khởi tạo Receiver và giăng lưới bắt sự kiện PHONE_STATE
-        callReceiver = new com.hoiaebtl.antispam_call_android.core.CallReceiver();
-        android.content.IntentFilter filter = new android.content.IntentFilter("android.intent.action.PHONE_STATE");
-        registerReceiver(callReceiver, filter);
-    }
-    @Override
-    protected void onStop() {
-        super.onStop();
-        // Khi ẩn app thì thu lưới lại
-        if (callReceiver != null) {
-            unregisterReceiver(callReceiver);
-        }
     }
 
     private void checkAndRequestPermissions() {
-        // 1. Danh sách các quyền cốt lõi cho module của Thế
         String[] permissions = {
                 Manifest.permission.READ_PHONE_STATE,
                 Manifest.permission.READ_CALL_LOG,
@@ -70,15 +53,17 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        // Hiện bảng popup mặc định của Android hỏi người dùng
         if (needRequest) {
             ActivityCompat.requestPermissions(this, permissions, PERMISSION_REQUEST_CODE);
+        } else {
+            // Nếu đã có quyền, khởi động Service luôn
+            startCoreService();
         }
 
-        // 2. Xin quyền vẽ đè màn hình (Dọn đường sẵn cho module Overlay của Tuấn)
+        // Xin quyền Overlay (Cần cho module của Tuấn)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!Settings.canDrawOverlays(this)) {
-                Toast.makeText(this, "Vui lòng cấp quyền Hiển thị trên ứng dụng khác", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Vui lòng cấp quyền 'Hiển thị trên ứng dụng khác'", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                         Uri.parse("package:" + getPackageName()));
                 startActivity(intent);
@@ -86,21 +71,32 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Hàm này bắt sự kiện khi người dùng bấm "Cho phép" hoặc "Từ chối"
+    private void startCoreService() {
+        Intent serviceIntent = new Intent(this, CallListenService.class);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(serviceIntent);
+        } else {
+            startService(serviceIntent);
+        }
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PERMISSION_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Đã cấp quyền! Bắt đầu kích hoạt bảo vệ...", Toast.LENGTH_SHORT).show();
+            boolean allGranted = true;
+            for (int result : grantResults) {
+                if (result != PackageManager.PERMISSION_GRANTED) {
+                    allGranted = false;
+                    break;
+                }
+            }
 
-                // === THÊM 2 DÒNG NÀY VÀO ===
-                Intent serviceIntent = new Intent(this, com.hoiaebtl.antispam_call_android.core.CallListenService.class);
-                ContextCompat.startForegroundService(this, serviceIntent);
-                // ===========================
-
+            if (allGranted) {
+                Toast.makeText(this, "Đã cấp đủ quyền. Khởi động bảo vệ...", Toast.LENGTH_SHORT).show();
+                startCoreService();
             } else {
-                Toast.makeText(this, "App cần quyền để hoạt động. Vui lòng cấp quyền!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "App cần các quyền này để hoạt động ổn định.", Toast.LENGTH_LONG).show();
             }
         }
     }
