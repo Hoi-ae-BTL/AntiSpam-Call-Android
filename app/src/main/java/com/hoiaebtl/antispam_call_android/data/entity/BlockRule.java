@@ -17,7 +17,7 @@ public class BlockRule {
     @PrimaryKey(autoGenerate = true)
     public int rule_id;
 
-    public String user_id;
+    public int user_id;
 
     public String pattern;
 

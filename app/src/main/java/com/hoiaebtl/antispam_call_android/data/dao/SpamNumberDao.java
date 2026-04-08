@@ -16,6 +16,9 @@ public interface SpamNumberDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(SpamNumber spamNumber);
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertAll(List<SpamNumber> spamNumbers);
+
     @Delete
     void delete(SpamNumber spamNumber);
 
@@ -27,4 +30,7 @@ public interface SpamNumberDao {
 
     @Query("SELECT * FROM SpamNumbers ORDER BY total_reports DESC")
     List<SpamNumber> getTopSpamNumbers();
+
+    @Query("SELECT COUNT(*) FROM SpamNumbers")
+    int getCount();
 }

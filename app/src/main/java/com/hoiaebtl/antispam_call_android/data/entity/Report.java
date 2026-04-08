@@ -1,5 +1,6 @@
 package com.hoiaebtl.antispam_call_android.data.entity;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
@@ -29,8 +30,9 @@ public class Report {
     @PrimaryKey(autoGenerate = true)
     public int report_id;
 
-    public String user_id;
+    public int user_id;
 
+    @NonNull
     public String phone_number;
 
     public int category_id;

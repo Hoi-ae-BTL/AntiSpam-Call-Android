@@ -8,7 +8,6 @@ import android.os.Build;
 import android.telecom.TelecomManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import androidx.room.Room;
 
 import com.hoiaebtl.antispam_call_android.data.database.AppDatabase;
 import com.hoiaebtl.antispam_call_android.data.entity.CallLog;
@@ -40,11 +39,8 @@ public class CallReceiver extends BroadcastReceiver {
     private void checkSpamAndProcess(Context context, String number) {
         executorService.execute(() -> {
             try {
-                // 1. Kết nối Database
-                AppDatabase db = Room.databaseBuilder(context.getApplicationContext(),
-                        AppDatabase.class, "database-name")
-                        .fallbackToDestructiveMigration()
-                        .build();
+                // 1. Kết nối Database sử dụng Singleton
+                AppDatabase db = AppDatabase.getInstance(context);
 
                 // 2. Truy vấn số điện thoại từ danh sách đen
                 SpamNumber spam = db.spamNumberDao().findByPhone(number);
@@ -55,7 +51,7 @@ public class CallReceiver extends BroadcastReceiver {
                 log.setPhoneNumber(number);
                 log.setCallTime(System.currentTimeMillis());
                 log.setSpam(isSpam);
-                log.setUserId("default_user");
+                log.setUserId(1); // Mặc định user id là 1
                 db.callLogDao().insert(log);
 
                 if (isSpam) {
