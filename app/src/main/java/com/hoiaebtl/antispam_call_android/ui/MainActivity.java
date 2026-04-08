@@ -52,11 +52,9 @@ public class MainActivity extends AppCompatActivity {
             } else if (itemId == R.id.navigation_blacklist) {
                 selectedFragment = new BlacklistFragment();
             } else if (itemId == R.id.navigation_logs) {
-                // selectedFragment = new LogsFragment(); // Nếu đã có
-                Toast.makeText(this, "Tính năng Nhật ký đang phát triển", Toast.LENGTH_SHORT).show();
+                selectedFragment = new LogsFragment();
             } else if (itemId == R.id.navigation_stats) {
-                // selectedFragment = new StatsFragment(); // Nếu đã có
-                Toast.makeText(this, "Tính năng Thống kê đang phát triển", Toast.LENGTH_SHORT).show();
+                selectedFragment = new StatsFragment();
             }
 
             if (selectedFragment != null) {
