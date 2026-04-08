@@ -15,8 +15,8 @@ public interface PersonalListDao {
     @Insert
     void insert(PersonalList list);
 
-    @Query("SELECT * FROM PersonalLists WHERE user_id = :user")
-    List<PersonalList> getUserList(String user);
+    @Query("SELECT * FROM PersonalLists WHERE user_id = :userId")
+    List<PersonalList> getUserList(int userId);
 
     @Query("DELETE FROM PersonalLists WHERE phone_number = :phone")
     void delete(String phone);

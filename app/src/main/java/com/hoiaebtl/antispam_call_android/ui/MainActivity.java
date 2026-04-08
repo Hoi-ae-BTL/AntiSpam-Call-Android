@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.hoiaebtl.antispam_call_android.R;
 import com.hoiaebtl.antispam_call_android.core.CallListenService;
+import com.hoiaebtl.antispam_call_android.data.database.DatabaseSeeder;
 import com.hoiaebtl.antispam_call_android.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -32,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
         
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        // Seed database with initial data
+        DatabaseSeeder.seedIfNeeded(this);
 
         // Hiển thị HomeFragment mặc định khi mới mở app
         if (savedInstanceState == null) {

@@ -14,6 +14,6 @@ public interface CallLogDao {
     @Insert
     void insert(CallLog log);
 
-    @Query("SELECT * FROM CallLogs WHERE user_id = :user ORDER BY call_time DESC")
-    List<CallLog> getUserLogs(String user);
+    @Query("SELECT * FROM CallLogs WHERE user_id = :userId ORDER BY call_time DESC")
+    List<CallLog> getUserLogs(int userId);
 }

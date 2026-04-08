@@ -17,6 +17,6 @@ public interface ReportDao {
     @Query("SELECT * FROM Reports WHERE phone_number = :phone")
     List<Report> getReportsByPhone(String phone);
 
-    @Query("SELECT * FROM Reports WHERE user_id = :user")
-    List<Report> getReportsByUser(String user);
+    @Query("SELECT * FROM Reports WHERE user_id = :userId")
+    List<Report> getReportsByUser(int userId);
 }

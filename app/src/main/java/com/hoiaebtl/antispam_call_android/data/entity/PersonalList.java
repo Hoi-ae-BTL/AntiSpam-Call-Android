@@ -17,7 +17,7 @@ public class PersonalList {
     @PrimaryKey(autoGenerate = true)
     public int list_id;
 
-    public String user_id;
+    public int user_id;
 
     public String phone_number;
 

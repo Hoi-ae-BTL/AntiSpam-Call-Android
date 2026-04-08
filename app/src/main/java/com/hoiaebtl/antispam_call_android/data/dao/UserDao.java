@@ -20,6 +20,6 @@ public interface UserDao {
     User getUserById(int id);
 
     @Query("delete from Users where user_id == :id")
-    void deleteUser(String id);
+    void deleteUser(int id);
 
 }

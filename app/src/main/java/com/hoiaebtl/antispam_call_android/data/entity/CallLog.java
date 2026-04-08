@@ -11,7 +11,7 @@ public class CallLog {
     @PrimaryKey(autoGenerate = true)
     private int log_id;
 
-    private String user_id;
+    private int user_id;
 
     private String phone_number;
 
@@ -27,8 +27,8 @@ public class CallLog {
     public int getLog_id() { return log_id; }
     public void setLog_id(int log_id) { this.log_id = log_id; }
 
-    public String getUser_id() { return user_id; }
-    public void setUser_id(String user_id) { this.user_id = user_id; }
+    public int getUser_id() { return user_id; }
+    public void setUser_id(int user_id) { this.user_id = user_id; }
 
     public String getPhone_number() { return phone_number; }
     public void setPhone_number(String phone_number) { this.phone_number = phone_number; }
@@ -46,9 +46,8 @@ public class CallLog {
     public void setSpam(boolean spam) { isSpam = spam; }
 
     // Backward compatibility aliases for Room or other parts of the code if needed
-    // However, it's better to update the callers.
-    public String getUserId() { return getUser_id(); }
-    public void setUserId(String user_id) { setUser_id(user_id); }
+    public int getUserId() { return getUser_id(); }
+    public void setUserId(int user_id) { setUser_id(user_id); }
 
     public String getPhoneNumber() { return getPhone_number(); }
     public void setPhoneNumber(String phone_number) { setPhone_number(phone_number); }
