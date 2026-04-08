@@ -1,5 +1,6 @@
 package com.hoiaebtl.antispam_call_android.core;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -18,6 +19,7 @@ public class CallListenService extends Service {
 
     private CallReceiver callReceiver;
 
+    @SuppressLint("ForegroundServiceType")
     @Override
     public void onCreate() {
         super.onCreate();

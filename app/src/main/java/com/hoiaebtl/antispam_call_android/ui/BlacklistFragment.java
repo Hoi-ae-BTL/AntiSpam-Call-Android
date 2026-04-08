@@ -3,6 +3,7 @@ package com.hoiaebtl.antispam_call_android.ui;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.room.Room;
 
 import com.hoiaebtl.antispam_call_android.data.database.AppDatabase;
 import com.hoiaebtl.antispam_call_android.data.entity.SpamNumber;
@@ -25,9 +25,9 @@ import java.util.concurrent.Executors;
 
 public class BlacklistFragment extends Fragment {
 
+    private static final String TAG = "BlacklistFragment";
     private FragmentBlacklistBinding binding;
     private BlacklistAdapter adapter;
-    private AppDatabase db;
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     @Nullable
@@ -40,12 +40,6 @@ public class BlacklistFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        // Thêm fallbackToDestructiveMigration để tránh crash khi đổi version
-        db = Room.databaseBuilder(requireContext().getApplicationContext(),
-                AppDatabase.class, "database-name")
-                .fallbackToDestructiveMigration()
-                .build();
 
         setupRecyclerView();
         loadBlacklist();
@@ -60,7 +54,7 @@ public class BlacklistFragment extends Fragment {
 
         adapter.setOnDeleteClickListener(spamNumber -> {
             executorService.execute(() -> {
-                db.spamNumberDao().delete(spamNumber);
+                AppDatabase.getInstance(requireContext()).spamNumberDao().delete(spamNumber);
                 loadBlacklist();
             });
         });
@@ -69,12 +63,24 @@ public class BlacklistFragment extends Fragment {
     private void loadBlacklist() {
         executorService.execute(() -> {
             try {
+                AppDatabase db = AppDatabase.getInstance(requireContext());
                 List<SpamNumber> list = db.spamNumberDao().getAllSpamNumbers();
+                
+                Log.d(TAG, "Đã tải danh sách chặn: " + list.size() + " số.");
+                
                 requireActivity().runOnUiThread(() -> {
-                    if (adapter != null) adapter.setItems(list);
+                    if (binding != null) {
+                        if (list.isEmpty()) {
+                            binding.rvBlacklist.setVisibility(View.GONE);
+                            // Hiển thị một TextView thông báo trống nếu cần
+                        } else {
+                            binding.rvBlacklist.setVisibility(View.VISIBLE);
+                            adapter.setItems(list);
+                        }
+                    }
                 });
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e(TAG, "Lỗi khi tải danh sách: " + e.getMessage());
             }
         });
     }
@@ -103,14 +109,18 @@ public class BlacklistFragment extends Fragment {
 
     private void addNumberToBlacklist(String number) {
         executorService.execute(() -> {
-            SpamNumber spam = new SpamNumber();
-            spam.phone_number = number;
-            spam.total_reports = 1;
-            spam.last_reported_at = String.valueOf(System.currentTimeMillis());
-            
             try {
-                db.spamNumberDao().insert(spam);
+                SpamNumber spam = new SpamNumber();
+                spam.phone_number = number;
+                spam.primary_category_id = 1; // Mặc định Lừa đảo
+                spam.total_reports = 1;
+                spam.last_reported_at = java.text.DateFormat.getDateTimeInstance().format(new java.util.Date());
+                
+                AppDatabase.getInstance(requireContext()).spamNumberDao().insert(spam);
                 loadBlacklist();
+                
+                requireActivity().runOnUiThread(() -> 
+                    Toast.makeText(getContext(), "Đã thêm " + number + " vào danh sách chặn", Toast.LENGTH_SHORT).show());
             } catch (Exception e) {
                 requireActivity().runOnUiThread(() -> 
                     Toast.makeText(getContext(), "Lỗi: " + e.getMessage(), Toast.LENGTH_LONG).show());

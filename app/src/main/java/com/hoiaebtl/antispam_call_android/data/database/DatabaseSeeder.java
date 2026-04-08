@@ -19,10 +19,12 @@ public class DatabaseSeeder {
             try {
                 AppDatabase db = AppDatabase.getInstance(context);
                 
+                // Kiểm tra xem đã có category chưa
                 if (db.categoryDao().getCount() == 0) {
                     seedCategories(db);
                 }
                 
+                // Kiểm tra xem đã có số spam chưa
                 if (db.spamNumberDao().getCount() == 0) {
                     seedSpamNumbers(db);
                 }
@@ -50,34 +52,26 @@ public class DatabaseSeeder {
         c3.severity_level = 5;
         categories.add(c3);
 
-        Category c4 = new Category();
-        c4.name = "Đòi nợ";
-        c4.severity_level = 3;
-        categories.add(c4);
-
         db.categoryDao().insertAll(categories);
-        Log.d("DatabaseSeeder", "Inserted categories");
+        Log.d("DatabaseSeeder", "Đã khởi tạo danh mục vi phạm.");
     }
 
     private static void seedSpamNumbers(AppDatabase db) {
         List<SpamNumber> spamNumbers = new ArrayList<>();
-        Random random = new Random();
-        String[] carriers = {"Viettel", "Vinaphone", "Mobifone", "Vietnamobile"};
-        String[] regions = {"Hà Nội", "TP. Hồ Chí Minh", "Đà Nẵng", "Cần Thơ", "Hải Phòng"};
         
-        for (int i = 0; i < 100; i++) {
-            String phone = "09" + String.format(Locale.US, "%08d", random.nextInt(100000000));
-            int categoryId = random.nextInt(4) + 1;
-            int trustScore = random.nextInt(50);
-            int totalReports = random.nextInt(500) + 10;
-            String carrier = carriers[random.nextInt(carriers.length)];
-            String region = regions[random.nextInt(regions.length)];
-            String lastReported = String.format(Locale.US, "2024-12-%02d 10:00:00", random.nextInt(30) + 1);
+        // THÊM SỐ TEST CỐ ĐỊNH ĐỂ DỄ DÀNG KIỂM TRA
+        // Số này sẽ luôn bị chặn/cảnh báo
+        spamNumbers.add(new SpamNumber("123456789", 1, 10, 999, "Hệ thống", "Toàn quốc", "2024-01-01 12:00:00"));
+        spamNumbers.add(new SpamNumber("+84123456789", 1, 10, 999, "Hệ thống", "Toàn quốc", "2024-01-01 12:00:00"));
 
-            spamNumbers.add(new SpamNumber(phone, categoryId, trustScore, totalReports, carrier, region, lastReported));
+        // Thêm 50 số ngẫu nhiên khác
+        Random random = new Random();
+        for (int i = 0; i < 50; i++) {
+            String phone = "09" + String.format(Locale.US, "%08d", random.nextInt(100000000));
+            spamNumbers.add(new SpamNumber(phone, random.nextInt(3) + 1, 20, 50, "Nhà mạng", "Việt Nam", "2024-01-01 10:00:00"));
         }
 
         db.spamNumberDao().insertAll(spamNumbers);
-        Log.d("DatabaseSeeder", "Inserted 100 spam numbers");
+        Log.d("DatabaseSeeder", "Đã thêm 2 số test và 50 số ngẫu nhiên vào danh sách đen.");
     }
 }
