@@ -30,6 +30,7 @@ public class HybridSpamChecker {
         public boolean isVerifiedSafe;
         public String name;
         public String label;
+        public int reportCount;
         
         public boolean hasData() { return isSpam || isVerifiedSafe; }
     }
@@ -79,12 +80,14 @@ public class HybridSpamChecker {
                     if (document.exists()) {
                         Log.d(TAG, "Tìm thấy trên Firebase: Là Spam!");
                         int catId = document.getLong("primary_category_id") != null ? document.getLong("primary_category_id").intValue() : 0;
+                        int rCount = document.getLong("report_count") != null ? document.getLong("report_count").intValue() : 1;
                         executorService.execute(() -> {
                             saveCallLog(db, normalizedNumber, true, catId);
-                            SpamNumber newSpam = new SpamNumber(normalizedNumber, catId, 0, 0, "", "", "");
+                            SpamNumber newSpam = new SpamNumber(normalizedNumber, catId, rCount, 0, "", "", "");
                             db.spamNumberDao().insert(newSpam);
                         });
                         result.isSpam = true;
+                        result.reportCount = rCount;
                         result.label = document.getString("label") != null ? document.getString("label") : "Cảnh báo Lừa đảo";
                         callback.onResult(result);
                     } else {

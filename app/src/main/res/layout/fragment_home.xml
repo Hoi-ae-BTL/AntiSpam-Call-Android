@@ -109,6 +109,36 @@
                     android:visibility="gone"
                     android:padding="8dp"
                     android:background="#F0F0F0" />
+                    
+                <!-- Action Buttons: Ẩn đi chờ kết quả -->
+                <LinearLayout
+                    android:id="@+id/layout_report_actions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    android:layout_marginTop="12dp">
+                    
+                    <Button
+                        android:id="@+id/btn_report_safe"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="4dp"
+                        android:text="Khai báo Nhận diện"
+                        android:textSize="12sp"
+                        app:backgroundTint="#4CAF50" />
+                        
+                    <Button
+                        android:id="@+id/btn_report_spam"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:text="Báo cáo Lừa đảo"
+                        android:textSize="12sp"
+                        app:backgroundTint="#E53935" />
+                </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
