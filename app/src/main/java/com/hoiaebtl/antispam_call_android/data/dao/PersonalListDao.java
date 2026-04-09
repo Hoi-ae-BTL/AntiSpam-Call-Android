@@ -20,4 +20,7 @@ public interface PersonalListDao {
 
     @Query("DELETE FROM PersonalLists WHERE phone_number = :phone")
     void delete(String phone);
+
+    @Query("SELECT * FROM PersonalLists WHERE phone_number = :phone LIMIT 1")
+    PersonalList findByPhone(String phone);
 }

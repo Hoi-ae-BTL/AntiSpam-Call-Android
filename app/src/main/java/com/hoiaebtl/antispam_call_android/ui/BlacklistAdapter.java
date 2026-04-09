@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import com.hoiaebtl.antispam_call_android.data.entity.PersonalList;
 import com.hoiaebtl.antispam_call_android.data.entity.SpamNumber;
 import com.hoiaebtl.antispam_call_android.databinding.ItemBlacklistBinding;
 import java.util.ArrayList;
@@ -11,14 +12,14 @@ import java.util.List;
 
 public class BlacklistAdapter extends RecyclerView.Adapter<BlacklistAdapter.ViewHolder> {
 
-    private List<SpamNumber> items = new ArrayList<>();
+    private List<Object> items = new ArrayList<>();
     private OnDeleteClickListener deleteClickListener;
 
     public interface OnDeleteClickListener {
-        void onDeleteClick(SpamNumber spamNumber);
+        void onDeleteClick(Object item);
     }
 
-    public void setItems(List<SpamNumber> items) {
+    public void setItems(List<Object> items) {
         this.items = items;
         notifyDataSetChanged();
     }
@@ -37,9 +38,17 @@ public class BlacklistAdapter extends RecyclerView.Adapter<BlacklistAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        SpamNumber item = items.get(position);
-        holder.binding.tvBlacklistNumber.setText(item.phone_number);
-        holder.binding.tvBlacklistNote.setText("Báo cáo: " + item.total_reports + " lần");
+        Object item = items.get(position);
+        
+        if (item instanceof PersonalList) {
+            PersonalList p = (PersonalList) item;
+            holder.binding.tvBlacklistNumber.setText(p.phone_number);
+            holder.binding.tvBlacklistNote.setText("Cá nhân: " + (p.note != null ? p.note : "Không có ghi chú"));
+        } else if (item instanceof SpamNumber) {
+            SpamNumber s = (SpamNumber) item;
+            holder.binding.tvBlacklistNumber.setText(s.phone_number);
+            holder.binding.tvBlacklistNote.setText("Cộng đồng (Báo cáo: " + s.total_reports + " lần)");
+        }
         
         holder.binding.btnDeleteBlacklist.setOnClickListener(v -> {
             if (deleteClickListener != null) {

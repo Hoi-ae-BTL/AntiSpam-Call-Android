@@ -20,16 +20,26 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.hoiaebtl.antispam_call_android.R;
+import com.hoiaebtl.antispam_call_android.data.database.AppDatabase;
+import com.hoiaebtl.antispam_call_android.data.entity.PersonalList;
+import com.hoiaebtl.antispam_call_android.data.entity.SpamNumber;
 import com.hoiaebtl.antispam_call_android.databinding.FragmentHomeBinding;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
     private SharedPreferences prefs;
+    private FirebaseFirestore db;
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     private final ActivityResultLauncher<String[]> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> {
@@ -47,6 +57,7 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         prefs = requireActivity().getSharedPreferences("SafeCallPrefs", Context.MODE_PRIVATE);
+        db = FirebaseFirestore.getInstance();
 
         setupUI();
         checkAllPermissions();
@@ -68,6 +79,79 @@ public class HomeFragment extends Fragment {
         });
 
         binding.btnUpdatePermissions.setOnClickListener(v -> requestMissingPermissions());
+
+        // Xử lý tra cứu
+        binding.btnSearchFirebase.setOnClickListener(v -> {
+            String phone = binding.etSearchPhone.getText().toString().trim();
+            if (phone.isEmpty()) {
+                binding.tilSearch.setError("Vui lòng nhập số điện thoại");
+                return;
+            }
+            binding.tilSearch.setError(null);
+            searchPhoneNumber(phone);
+        });
+    }
+
+    private void searchPhoneNumber(String phone) {
+        binding.btnSearchFirebase.setEnabled(false);
+        binding.tvSearchResult.setVisibility(View.VISIBLE);
+        binding.tvSearchResult.setText("Đang tra cứu...");
+        binding.tvSearchResult.setBackgroundColor(Color.parseColor("#EEEEEE"));
+        binding.tvSearchResult.setTextColor(Color.BLACK);
+
+        // 1. Kiểm tra trong Database local trước (Room)
+        executorService.execute(() -> {
+            AppDatabase localDb = AppDatabase.getInstance(requireContext());
+            PersonalList personal = localDb.personalListDao().findByPhone(phone);
+            SpamNumber localSpam = localDb.spamNumberDao().findByPhone(phone);
+
+            String localReason = null;
+            if (personal != null) {
+                localReason = "Danh sách chặn cá nhân: " + (personal.note != null ? personal.note : "Không có ghi chú");
+            } else if (localSpam != null) {
+                localReason = "Danh sách đen cộng đồng (đã lưu máy)";
+            }
+
+            final String finalLocalReason = localReason;
+            
+            // 2. Sau đó kiểm tra Firebase
+            db.collection("spam_numbers").document(phone).get().addOnCompleteListener(task -> {
+                if (binding == null) return;
+                binding.btnSearchFirebase.setEnabled(true);
+
+                if (finalLocalReason != null) {
+                    // Ưu tiên kết quả local nếu có
+                    showSearchResult("🚨 CẢNH BÁO: " + finalLocalReason, true);
+                } else if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null && document.exists()) {
+                        String label = document.getString("label");
+                        showSearchResult("🚨 CẢNH BÁO: Số này được báo cáo là \"" + (label != null ? label : "Lừa đảo") + "\" trên hệ thống cộng đồng!", true);
+                    } else {
+                        showSearchResult("✅ Số này hiện không nằm trong bất kỳ danh sách chặn nào.", false);
+                    }
+                } else {
+                    showSearchResult("❌ Lỗi kết nối máy chủ. Vui lòng thử lại.", false);
+                }
+            });
+        });
+    }
+
+    private void showSearchResult(String message, boolean isSpam) {
+        requireActivity().runOnUiThread(() -> {
+            if (binding == null) return;
+            binding.tvSearchResult.setText(message);
+            if (isSpam) {
+                binding.tvSearchResult.setBackgroundColor(Color.parseColor("#FFEBEE"));
+                binding.tvSearchResult.setTextColor(Color.parseColor("#B71C1C"));
+            } else if (message.startsWith("✅")) {
+                binding.tvSearchResult.setBackgroundColor(Color.parseColor("#E8F5E9"));
+                binding.tvSearchResult.setTextColor(Color.parseColor("#1B5E20"));
+            } else {
+                binding.tvSearchResult.setBackgroundColor(Color.parseColor("#FFF3E0"));
+                binding.tvSearchResult.setTextColor(Color.BLACK);
+            }
+        });
     }
 
     private void checkAllPermissions() {
@@ -166,5 +250,6 @@ public class HomeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+        executorService.shutdown();
     }
 }

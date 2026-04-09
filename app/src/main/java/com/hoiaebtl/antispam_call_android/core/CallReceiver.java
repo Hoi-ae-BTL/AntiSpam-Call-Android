@@ -9,16 +9,12 @@ import android.telecom.TelecomManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
-import com.hoiaebtl.antispam_call_android.data.database.AppDatabase;
-import com.hoiaebtl.antispam_call_android.data.entity.CallLog;
-import com.hoiaebtl.antispam_call_android.data.entity.SpamNumber;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
+/**
+ * Legacy Fallback: Dùng riêng cho các máy thuộc hệ điều hành Android 9 trở xuống.
+ * Từ Android 10 trở lên, AppCallScreeningService sẽ gánh vác xử lý chính.
+ */
 public class CallReceiver extends BroadcastReceiver {
-    private static final String TAG = "SafeCall_Core";
-    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private static final String TAG = "CallReceiver_Legacy";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -29,59 +25,28 @@ public class CallReceiver extends BroadcastReceiver {
                 String incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
                 
                 if (incomingNumber != null) {
-                    Log.d(TAG, "PHÁT HIỆN CUỘC GỌI ĐẾN: " + incomingNumber);
-                    checkSpamAndProcess(context, incomingNumber);
+                    Log.d(TAG, "PHÁT HIỆN CUỘC GỌI ĐẾN (LEGACY): " + incomingNumber);
+                    
+                    String normalizedNumber = NumberNormalizer.normalize(incomingNumber, "VN");
+                    HybridSpamChecker checker = new HybridSpamChecker(context);
+                    
+                    checker.checkIsSpam(normalizedNumber, isSpam -> {
+                        if (isSpam) {
+                            Log.w(TAG, "CẢNH BÁO: Số lừa đảo " + normalizedNumber);
+                            
+                            SharedPreferences prefs = context.getSharedPreferences("SafeCallPrefs", Context.MODE_PRIVATE);
+                            boolean isAutoBlockEnabled = prefs.getBoolean("auto_block", false);
+
+                            if (isAutoBlockEnabled) {
+                                endCall(context); // Dùng TelecomManager (dễ lỗi trên Android 10+)
+                            } else {
+                                checker.showSpamOverlay(incomingNumber);
+                            }
+                        }
+                    });
                 }
             }
         }
-    }
-
-    private void checkSpamAndProcess(Context context, String number) {
-        executorService.execute(() -> {
-            try {
-                // 1. Kết nối Database sử dụng Singleton
-                AppDatabase db = AppDatabase.getInstance(context);
-
-                // 2. Truy vấn số điện thoại từ danh sách đen
-                SpamNumber spam = db.spamNumberDao().findByPhone(number);
-                boolean isSpam = (spam != null);
-
-                // 3. Lưu nhật ký cuộc gọi
-                CallLog log = new CallLog();
-                log.setPhoneNumber(number);
-                log.setCallTime(System.currentTimeMillis());
-                log.setSpam(isSpam);
-                log.setUserId(1); // Mặc định user id là 1
-                
-                if (isSpam) {
-                    log.setCategoryId(spam.primary_category_id);
-                }
-
-                db.callLogDao().insert(log);
-
-                if (isSpam) {
-                    Log.w(TAG, "CẢNH BÁO: Số lừa đảo " + number);
-
-                    // 4. Kiểm tra xem người dùng có bật "Tự động chặn" không
-                    SharedPreferences prefs = context.getSharedPreferences("SafeCallPrefs", Context.MODE_PRIVATE);
-                    boolean isAutoBlockEnabled = prefs.getBoolean("auto_block", false);
-
-                    if (isAutoBlockEnabled) {
-                        Log.w(TAG, "Đang thực hiện TỰ ĐỘNG CHẶN cuộc gọi...");
-                        endCall(context);
-                    } else {
-                        // Nếu không chặn thì hiện Overlay cảnh báo (Module Tuấn)
-                        Intent overlayIntent = new Intent(context, OverlayService.class);
-                        overlayIntent.putExtra("spam_number", number);
-                        overlayIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        context.startService(overlayIntent);
-                    }
-                }
-                
-            } catch (Exception e) {
-                Log.e(TAG, "Lỗi xử lý: " + e.getMessage());
-            }
-        });
     }
 
     private void endCall(Context context) {
@@ -89,16 +54,12 @@ public class CallReceiver extends BroadcastReceiver {
             TelecomManager telecomManager = (TelecomManager) context.getSystemService(Context.TELECOM_SERVICE);
             if (telecomManager != null) {
                 try {
-                    // Quyền ANSWER_PHONE_CALLS đã được Thế xin ở Manifest
                     telecomManager.endCall();
                     Log.d(TAG, "Cuộc gọi đã bị ngắt tự động bằng TelecomManager.");
                 } catch (SecurityException e) {
-                    Log.e(TAG, "Không có quyền ngắt cuộc gọi: " + e.getMessage());
+                    Log.e(TAG, "Lỗi Security do máy đời mới chặn TelecomManager: " + e.getMessage());
                 }
             }
-        } else {
-            // Đối với Android thấp hơn 9, việc ngắt cuộc gọi phức tạp hơn (cần dùng Reflection)
-            Log.w(TAG, "Tính năng chặn tự động chưa hỗ trợ đầy đủ trên Android dưới 9.");
         }
     }
 }

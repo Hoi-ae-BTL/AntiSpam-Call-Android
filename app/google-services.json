@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "806377682451",
+    "project_id": "antispam-call-android",
+    "storage_bucket": "antispam-call-android.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:806377682451:android:01e6ad7b87ca46ee95b1e6",
+        "android_client_info": {
+          "package_name": "com.hoiaebtl.antispam_call_android"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCaJM5FqyYOzv752JBzLUokpvGAqZvHI_w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

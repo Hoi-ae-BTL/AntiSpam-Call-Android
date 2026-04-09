@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
+import android.app.role.RoleManager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +17,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import java.util.concurrent.TimeUnit;
+import com.hoiaebtl.antispam_call_android.data.worker.SpamSyncWorker;
 
 import com.hoiaebtl.antispam_call_android.R;
 import com.hoiaebtl.antispam_call_android.core.CallListenService;
@@ -65,6 +72,18 @@ public class MainActivity extends AppCompatActivity {
         });
 
         checkAndRequestPermissions();
+        scheduleBackgroundSync();
+    }
+
+    private void scheduleBackgroundSync() {
+        // Đồng bộ Firebase về Local DB mỗi 12 tiếng
+        PeriodicWorkRequest syncRequest = new PeriodicWorkRequest.Builder(SpamSyncWorker.class, 12, TimeUnit.HOURS)
+                .build();
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork("SpamSync", ExistingPeriodicWorkPolicy.KEEP, syncRequest);
+
+        // [MỚI FIX] Buộc đồng bộ NGAY LẬP TỨC lần đầu mở app thay vì đợi 12 tiếng!
+        OneTimeWorkRequest immediateSync = new OneTimeWorkRequest.Builder(SpamSyncWorker.class).build();
+        WorkManager.getInstance(this).enqueue(immediateSync);
     }
 
     private void loadFragment(Fragment fragment) {
@@ -107,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, permissions, PERMISSION_REQUEST_CODE);
         } else {
             startCoreService();
+            requestCallScreeningRole();
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -114,6 +134,19 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                         Uri.parse("package:" + getPackageName()));
                 startActivity(intent);
+            }
+        }
+    }
+
+    private void requestCallScreeningRole() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            RoleManager roleManager = (RoleManager) getSystemService(ROLE_SERVICE);
+            if (roleManager != null && roleManager.isRoleAvailable(RoleManager.ROLE_CALL_SCREENING)) {
+                if (!roleManager.isRoleHeld(RoleManager.ROLE_CALL_SCREENING)) {
+                    Log.d("MainActivity", "Yêu cầu quyền Call Screening (Native Chặn Gọi)");
+                    Intent intent = roleManager.createRequestRoleIntent(RoleManager.ROLE_CALL_SCREENING);
+                    startActivityForResult(intent, 200);
+                }
             }
         }
     }
@@ -144,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
             }
             if (allGranted) {
                 startCoreService();
+                requestCallScreeningRole();
             }
         }
     }

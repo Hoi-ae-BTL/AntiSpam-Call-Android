@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.google.services)
 }
 
 android {
@@ -50,6 +51,17 @@ dependencies {
     implementation "androidx.room:room-guava:$room_version"
     testImplementation "androidx.room:room-testing:$room_version"
     implementation "androidx.room:room-paging:$room_version"
+
+    // --- FIREBASE ---
+    implementation platform(libs.firebase.bom)
+    implementation libs.firebase.firestore
+    implementation libs.firebase.analytics
+    // Bổ sung thêm Auth để đăng nhập
+    implementation 'com.google.firebase:firebase-auth'
+
+    // Tích hợp kiến trúc Truecaller
+    implementation 'androidx.work:work-runtime:2.9.0'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.13.33'
 
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit

@@ -52,6 +52,66 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- TRA CỨU SỐ ĐIỆN THOẠI (Dữ liệu Firebase) -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="TRA CỨU CỘNG ĐỒNG"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="#757575"/>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            app:strokeWidth="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_search"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nhập số điện thoại cần kiểm tra"
+                    app:endIconMode="custom"
+                    app:endIconDrawable="@android:drawable/ic_menu_search">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_search_phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="phone" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/btn_search_firebase"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Kiểm tra trên hệ thống" />
+
+                <TextView
+                    android:id="@+id/tv_search_result"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:gravity="center"
+                    android:text="Kết quả sẽ hiển thị ở đây"
+                    android:visibility="gone"
+                    android:padding="8dp"
+                    android:background="#F0F0F0" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
         <!-- Cài đặt Chặn -->
         <TextView
             android:layout_width="wrap_content"
@@ -80,7 +140,7 @@
                 android:textStyle="bold" />
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Danh sách Quyền - LUÔN HIỂN THỊ -->
+        <!-- Danh sách Quyền -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
