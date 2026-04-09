@@ -30,8 +30,8 @@ public class AppCallScreeningService extends CallScreeningService {
         final String finalIncomingNumber = incomingNumber; // Sửa lỗi Java Lambda
 
         HybridSpamChecker checker = new HybridSpamChecker(getApplicationContext());
-        checker.checkIsSpam(normalizedNumber, isSpam -> {
-            if (isSpam) {
+        checker.checkCallerInfo(normalizedNumber, info -> {
+            if (info.isSpam) {
                 // Kiểm tra công tắc "Tự động chặn" từ SharedPreferences
                 android.content.SharedPreferences prefs = getSharedPreferences("SafeCallPrefs", android.content.Context.MODE_PRIVATE);
                 boolean isAutoBlock = prefs.getBoolean("auto_block", false);
@@ -52,11 +52,16 @@ public class AppCallScreeningService extends CallScreeningService {
                 }
                 
                 // Luôn hiện Overlay cảnh báo nếu có cuộc gọi spam (chặn hay ko vẫn có thể hiện hoặc ko)
-                checker.showSpamOverlay(finalIncomingNumber);
+                checker.showOverlay(finalIncomingNumber, info);
             } else {
-                Log.d(TAG, "Đã check xong: Số an toàn.");
+                Log.d(TAG, "Đã check xong: Không phải Spam.");
                 CallResponse response = new CallResponse.Builder().build();
                 respondToCall(callDetails, response);
+                
+                // Nếu là CallerID An Toàn thì báo Xanh
+                if (info.isVerifiedSafe && info.name != null) {
+                    checker.showOverlay(finalIncomingNumber, info);
+                }
             }
         });
     }

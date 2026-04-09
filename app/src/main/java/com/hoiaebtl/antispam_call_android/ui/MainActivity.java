@@ -105,12 +105,14 @@ public class MainActivity extends AppCompatActivity {
             permissions = new String[]{
                     Manifest.permission.READ_PHONE_STATE,
                     Manifest.permission.READ_CALL_LOG,
-                    Manifest.permission.ANSWER_PHONE_CALLS
+                    Manifest.permission.ANSWER_PHONE_CALLS,
+                    Manifest.permission.READ_CONTACTS
             };
         } else {
             permissions = new String[]{
                     Manifest.permission.READ_PHONE_STATE,
-                    Manifest.permission.READ_CALL_LOG
+                    Manifest.permission.READ_CALL_LOG,
+                    Manifest.permission.READ_CONTACTS
             };
         }
 

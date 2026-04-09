@@ -30,8 +30,8 @@ public class CallReceiver extends BroadcastReceiver {
                     String normalizedNumber = NumberNormalizer.normalize(incomingNumber, "VN");
                     HybridSpamChecker checker = new HybridSpamChecker(context);
                     
-                    checker.checkIsSpam(normalizedNumber, isSpam -> {
-                        if (isSpam) {
+                    checker.checkCallerInfo(normalizedNumber, info -> {
+                        if (info.isSpam) {
                             Log.w(TAG, "CẢNH BÁO: Số lừa đảo " + normalizedNumber);
                             
                             SharedPreferences prefs = context.getSharedPreferences("SafeCallPrefs", Context.MODE_PRIVATE);
@@ -40,8 +40,11 @@ public class CallReceiver extends BroadcastReceiver {
                             if (isAutoBlockEnabled) {
                                 endCall(context); // Dùng TelecomManager (dễ lỗi trên Android 10+)
                             } else {
-                                checker.showSpamOverlay(incomingNumber);
+                                checker.showOverlay(incomingNumber, info);
                             }
+                        } else if (info.isVerifiedSafe && info.name != null) {
+                            // Chỉ hiện màn hình Caller ID (không chặn)
+                            checker.showOverlay(incomingNumber, info);
                         }
                     });
                 }
