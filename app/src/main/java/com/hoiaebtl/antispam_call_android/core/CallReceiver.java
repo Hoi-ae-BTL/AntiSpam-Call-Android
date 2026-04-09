@@ -45,6 +45,11 @@ public class CallReceiver extends BroadcastReceiver {
                         }
                     });
                 }
+            } else if (TelephonyManager.EXTRA_STATE_IDLE.equals(state) || TelephonyManager.EXTRA_STATE_OFFHOOK.equals(state)) {
+                // Khi cuộc gọi kết thúc (IDLE) hoặc người dùng nhấc máy (OFFHOOK) -> Đóng Overlay
+                Log.d(TAG, "Cuộc gọi kết thúc / Đã nhấc máy -> Tắt Overlay.");
+                Intent stopIntent = new Intent(context, OverlayService.class);
+                context.stopService(stopIntent);
             }
         }
     }
