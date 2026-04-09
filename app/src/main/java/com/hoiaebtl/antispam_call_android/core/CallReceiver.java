@@ -52,6 +52,11 @@ public class CallReceiver extends BroadcastReceiver {
                 log.setCallTime(System.currentTimeMillis());
                 log.setSpam(isSpam);
                 log.setUserId(1); // Mặc định user id là 1
+                
+                if (isSpam) {
+                    log.setCategoryId(spam.primary_category_id);
+                }
+
                 db.callLogDao().insert(log);
 
                 if (isSpam) {

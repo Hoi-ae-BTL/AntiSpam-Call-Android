@@ -19,4 +19,7 @@ public interface CallLogDao {
 
     @Query("SELECT COUNT(*) FROM CallLogs WHERE isSpam = 1")
     int getTotalSpamCalls();
+
+    @Query("SELECT COUNT(*) FROM CallLogs WHERE category_id = :categoryId")
+    int getSpamCountByCategory(int categoryId);
 }

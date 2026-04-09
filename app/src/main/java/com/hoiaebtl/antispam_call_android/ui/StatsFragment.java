@@ -35,20 +35,48 @@ public class StatsFragment extends Fragment {
 
     private void loadStatistics() {
         executorService.execute(() -> {
+            if (getContext() == null) return;
             AppDatabase db = AppDatabase.getInstance(requireContext());
+            
+            // 1. Lấy tổng số cuộc gọi bị chặn
             int totalBlocked = db.callLogDao().getTotalSpamCalls();
             
-            // Giả lập dữ liệu phân loại (Trong thực tế sẽ query count group by category_id)
-            // Vì hiện tại database chưa lưu category_id vào CallLog nên ta dùng dummy data
-            
-            requireActivity().runOnUiThread(() -> {
-                if (binding != null) {
-                    binding.tvTotalBlocked.setText(String.valueOf(totalBlocked));
-                    
-                    // Nếu totalBlocked > 0, ta có thể tính toán phần trăm cho các thanh Progress
-                    // Tạm thời để các thanh progress như layout mẫu
-                }
-            });
+            // 2. Lấy số lượng theo từng loại (ID dựa trên DatabaseSeeder: 1-Lừa đảo, 2-Quảng cáo, 3-Mạo danh)
+            int countFinScam = db.callLogDao().getSpamCountByCategory(1); 
+            int countAds = db.callLogDao().getSpamCountByCategory(2);     
+            int countGov = db.callLogDao().getSpamCountByCategory(3); 
+
+            if (getActivity() != null) {
+                getActivity().runOnUiThread(() -> {
+                    if (binding != null) {
+                        // Cập nhật tổng số
+                        binding.tvTotalBlocked.setText(String.valueOf(totalBlocked));
+                        
+                        if (totalBlocked > 0) {
+                            // Tính toán phần trăm
+                            int pctFin = (countFinScam * 100) / totalBlocked;
+                            int pctAds = (countAds * 100) / totalBlocked;
+                            int pctGov = (countGov * 100) / totalBlocked;
+
+                            // Cập nhật ProgressBars
+                            binding.pbCat1.setProgress(pctFin);
+                            binding.pbCat2.setProgress(pctAds);
+                            binding.pbCat3.setProgress(pctGov);
+                            
+                            // Cập nhật text hiển thị chi tiết
+                            binding.tvCat1Name.setText("Lừa đảo tài chính (" + pctFin + "%)");
+                            binding.tvCat2Name.setText("Quảng cáo làm phiền (" + pctAds + "%)");
+                            binding.tvCat3Name.setText("Mạo danh cơ quan chức năng (" + pctGov + "%)");
+                        } else {
+                            // Reset về 0 nếu chưa có dữ liệu
+                            binding.pbCat1.setProgress(0);
+                            binding.pbCat2.setProgress(0);
+                            binding.pbCat3.setProgress(0);
+                            binding.tvTotalBlocked.setText("0");
+                        }
+                    }
+                });
+            }
         });
     }
 
