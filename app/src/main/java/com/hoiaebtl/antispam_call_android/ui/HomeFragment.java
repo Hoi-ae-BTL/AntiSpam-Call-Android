@@ -315,16 +315,16 @@ public class HomeFragment extends Fragment {
         boolean isAutoBlock = prefs.getBoolean("auto_block", false);
 
         if (isAllReady) {
-            binding.layoutStatusBg.setBackgroundColor(Color.parseColor("#E8F5E9")); // Green
-            binding.imgShield.setColorFilter(Color.parseColor("#2E7D32"));
+            binding.layoutStatusBg.setBackgroundColor(Color.parseColor("#0073FF")); // Truecaller Blue
+            binding.imgShield.setColorFilter(Color.parseColor("#FFFFFF"));
             binding.imgShield.setImageResource(android.R.drawable.ic_dialog_info);
-            binding.tvStatusTitle.setText(isAutoBlock ? "Đang tự động chặn" : "Đang bảo vệ");
-            binding.tvStatusTitle.setTextColor(Color.parseColor("#1B5E20"));
-            binding.tvStatusDesc.setText("Hệ thống đã sẵn sàng làm việc.");
-            binding.tvStatusDesc.setTextColor(Color.parseColor("#4CAF50"));
+            binding.tvStatusTitle.setText(isAutoBlock ? "BẢO VỆ TOÀN DIỆN" : "SẴN SÀNG BẢO VỆ");
+            binding.tvStatusTitle.setTextColor(Color.parseColor("#FFFFFF"));
+            binding.tvStatusDesc.setText("Hệ thống nhận diện Caller ID đang hoạt động.");
+            binding.tvStatusDesc.setTextColor(Color.parseColor("#E3F2FD"));
         } else {
             binding.layoutStatusBg.setBackgroundColor(Color.parseColor("#FFF3E0")); // Orange
-            binding.imgShield.setColorFilter(Color.parseColor("#EF6C00"));
+            binding.imgShield.setColorFilter(Color.parseColor("#E65100"));
             binding.imgShield.setImageResource(android.R.drawable.ic_dialog_alert);
             binding.tvStatusTitle.setText("Chưa hoàn tất");
             binding.tvStatusTitle.setTextColor(Color.parseColor("#E65100"));

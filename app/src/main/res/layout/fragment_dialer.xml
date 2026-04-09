@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8F9FA"
+    android:background="@color/background_light"
     android:orientation="vertical">
 
     <!-- Top section: Search results (Smart Dialing) -->
@@ -19,8 +19,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        android:elevation="4dp"
+        android:background="@color/surface_card"
+        android:elevation="0dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingHorizontal="24dp"
@@ -33,9 +33,9 @@
             android:layout_weight="1"
             android:gravity="center"
             android:hint="Sẵn sàng gọi"
-            android:textColor="#333333"
+            android:textColor="@color/colorPrimary"
             android:textSize="36sp"
-            android:textStyle="bold" />
+            android:fontFamily="sans-serif-medium" />
 
         <ImageButton
             android:id="@+id/btn_backspace"
@@ -43,50 +43,45 @@
             android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@android:drawable/ic_input_delete"
-            app:tint="#757575" />
+            app:tint="@color/text_secondary" />
     </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#E0E0E0" />
 
     <!-- Numpad section -->
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
+        android:background="@color/surface_card"
         android:columnCount="3"
-        android:paddingBottom="24dp"
-        android:paddingHorizontal="32dp"
-        android:paddingTop="24dp"
+        android:paddingBottom="16dp"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="16dp"
         android:rowCount="4">
 
         <!-- Row 1 -->
-        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="16dp"><Button android:id="@+id/btn_1" android:layout_width="80dp" android:layout_height="80dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="1" android:textSize="32sp" android:textColor="#333333" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
-        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="16dp"><Button android:id="@+id/btn_2" android:layout_width="80dp" android:layout_height="80dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="2" android:textSize="32sp" android:textColor="#333333" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
-        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="16dp"><Button android:id="@+id/btn_3" android:layout_width="80dp" android:layout_height="80dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="3" android:textSize="32sp" android:textColor="#333333" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp"><Button android:id="@+id/btn_1" android:layout_width="80dp" android:layout_height="80dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="1\n " android:textSize="28sp" android:textColor="@color/text_primary" android:fontFamily="sans-serif-light" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp"><Button android:id="@+id/btn_2" android:layout_width="80dp" android:layout_height="80dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="2\nABC" android:textSize="26sp" android:textColor="@color/text_primary" android:fontFamily="sans-serif-light" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp"><Button android:id="@+id/btn_3" android:layout_width="80dp" android:layout_height="80dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="3\nDEF" android:textSize="26sp" android:textColor="@color/text_primary" android:fontFamily="sans-serif-light" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
 
         <!-- Row 2 -->
-        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="16dp"><Button android:id="@+id/btn_4" android:layout_width="80dp" android:layout_height="80dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="4" android:textSize="32sp" android:textColor="#333333" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
-        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="16dp"><Button android:id="@+id/btn_5" android:layout_width="80dp" android:layout_height="80dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="5" android:textSize="32sp" android:textColor="#333333" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
-        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="16dp"><Button android:id="@+id/btn_6" android:layout_width="80dp" android:layout_height="80dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="6" android:textSize="32sp" android:textColor="#333333" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp"><Button android:id="@+id/btn_4" android:layout_width="80dp" android:layout_height="80dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="4\nGHI" android:textSize="26sp" android:textColor="@color/text_primary" android:fontFamily="sans-serif-light" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp"><Button android:id="@+id/btn_5" android:layout_width="80dp" android:layout_height="80dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="5\nJKL" android:textSize="26sp" android:textColor="@color/text_primary" android:fontFamily="sans-serif-light" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp"><Button android:id="@+id/btn_6" android:layout_width="80dp" android:layout_height="80dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="6\nMNO" android:textSize="26sp" android:textColor="@color/text_primary" android:fontFamily="sans-serif-light" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
 
         <!-- Row 3 -->
-        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="16dp"><Button android:id="@+id/btn_7" android:layout_width="80dp" android:layout_height="80dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="7" android:textSize="32sp" android:textColor="#333333" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
-        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="16dp"><Button android:id="@+id/btn_8" android:layout_width="80dp" android:layout_height="80dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="8" android:textSize="32sp" android:textColor="#333333" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
-        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="16dp"><Button android:id="@+id/btn_9" android:layout_width="80dp" android:layout_height="80dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="9" android:textSize="32sp" android:textColor="#333333" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp"><Button android:id="@+id/btn_7" android:layout_width="80dp" android:layout_height="80dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="7\nPQRS" android:textSize="24sp" android:textColor="@color/text_primary" android:fontFamily="sans-serif-light" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp"><Button android:id="@+id/btn_8" android:layout_width="80dp" android:layout_height="80dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="8\nTUV" android:textSize="26sp" android:textColor="@color/text_primary" android:fontFamily="sans-serif-light" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp"><Button android:id="@+id/btn_9" android:layout_width="80dp" android:layout_height="80dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="9\nWXYZ" android:textSize="24sp" android:textColor="@color/text_primary" android:fontFamily="sans-serif-light" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
 
         <!-- Row 4 -->
-        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1"><Button android:id="@+id/btn_star" android:layout_width="80dp" android:layout_height="80dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="*" android:textSize="32sp" android:textColor="#333333" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
-        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1"><Button android:id="@+id/btn_0" android:layout_width="80dp" android:layout_height="80dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="0" android:textSize="32sp" android:textColor="#333333" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
-        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1"><Button android:id="@+id/btn_hash" android:layout_width="80dp" android:layout_height="80dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="#" android:textSize="32sp" android:textColor="#333333" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1"><Button android:id="@+id/btn_star" android:layout_width="80dp" android:layout_height="80dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="*\n " android:textSize="28sp" android:textColor="@color/text_secondary" android:fontFamily="sans-serif-light" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1"><Button android:id="@+id/btn_0" android:layout_width="80dp" android:layout_height="80dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="0\n+" android:textSize="26sp" android:textColor="@color/text_primary" android:fontFamily="sans-serif-light" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1"><Button android:id="@+id/btn_hash" android:layout_width="80dp" android:layout_height="80dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="#\n " android:textSize="28sp" android:textColor="@color/text_secondary" android:fontFamily="sans-serif-light" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
     </GridLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
+        android:background="@color/surface_card"
         android:paddingBottom="24dp"
         android:paddingTop="8dp">
 
@@ -95,10 +90,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:backgroundTint="#4CAF50"
+            android:backgroundTint="@color/status_safe"
             android:src="@android:drawable/ic_menu_call"
             app:borderWidth="0dp"
             app:fabSize="normal"
-            app:tint="@android:color/white" />
+            app:tint="@android:color/white" 
+            app:elevation="8dp"/>
     </FrameLayout>
 </LinearLayout>

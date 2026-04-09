@@ -3,12 +3,23 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <!-- App Brand Colors (Truecaller Style) -->
+    <color name="colorPrimary">#0073FF</color>
+    <color name="colorPrimaryDark">#005BE6</color>
+    <color name="colorAccent">#00E676</color>
+
+    <color name="background_light">#F8F9FA</color>
+    <color name="surface_card">#FFFFFF</color>
+
     <!-- Status Colors from Report -->
     <color name="status_safe">#4CAF50</color>
-    <color name="status_danger">#F44336</color>
-    <color name="status_warning">#FFC107</color>
+    <color name="status_danger">#E53935</color>
+    <color name="status_warning">#FF9800</color>
 
-    <!-- Material 3 Surface & Text Colors (Approximate) -->
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+    
+    <!-- Restored Material 3 Surface & Text Colors -->
     <color name="surface_variant">#E7E0EC</color>
     <color name="on_surface_variant">#49454F</color>
     <color name="label_spam_bg">#FDE7E7</color>
