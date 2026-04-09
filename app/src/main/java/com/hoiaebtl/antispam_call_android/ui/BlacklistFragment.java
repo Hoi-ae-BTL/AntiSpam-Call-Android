@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.hoiaebtl.antispam_call_android.data.database.AppDatabase;
 import com.hoiaebtl.antispam_call_android.data.entity.PersonalList;
 import com.hoiaebtl.antispam_call_android.data.entity.SpamNumber;
+import com.hoiaebtl.antispam_call_android.data.entity.User;
 import com.hoiaebtl.antispam_call_android.databinding.FragmentBlacklistBinding;
 
 import java.util.ArrayList;
@@ -134,14 +135,23 @@ public class BlacklistFragment extends Fragment {
     private void addNumberToPersonalList(String phone, String note) {
         executorService.execute(() -> {
             try {
+                AppDatabase db = AppDatabase.getInstance(requireContext());
+                if (db.userDao().getUserById(1) == null) {
+                    User user = new User();
+                    user.user_id = 1;
+                    user.phone_number = "admin";
+                    user.created_at = java.text.DateFormat.getDateTimeInstance().format(new java.util.Date());
+                    db.userDao().insert(user);
+                }
+
                 PersonalList personal = new PersonalList();
-                personal.phone_number = phone;
+                personal.phone_number = com.hoiaebtl.antispam_call_android.core.NumberNormalizer.normalize(phone, "VN");
                 personal.user_id = 1;
                 personal.note = note.isEmpty() ? "Chặn thủ công" : note;
                 personal.list_type = "BLACKLIST";
                 personal.created_at = java.text.DateFormat.getDateTimeInstance().format(new java.util.Date());
                 
-                AppDatabase.getInstance(requireContext()).personalListDao().insert(personal);
+                db.personalListDao().insert(personal);
                 loadBlacklist();
                 
                 requireActivity().runOnUiThread(() -> 

@@ -4,16 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white">
+    android:background="@color/background_light">
 
     <TextView
         android:id="@+id/tv_blacklist_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_margin="20dp"
         android:text="Danh sách chặn"
-        android:textColor="@android:color/black"
-        android:textSize="24sp"
+        android:textColor="@color/text_primary"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -33,8 +33,8 @@
         android:id="@+id/tv_empty_blacklist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Danh sách trống"
-        android:textColor="@android:color/darker_gray"
+        android:text="Bạn chưa chặn số nào"
+        android:textColor="@color/text_secondary"
         android:textSize="16sp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -50,7 +50,7 @@
         android:clickable="true"
         android:focusable="true"
         android:src="@android:drawable/ic_input_add"
-        app:backgroundTint="@color/status_safe"
+        app:backgroundTint="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:tint="@android:color/white" />

@@ -72,6 +72,16 @@ public class HybridSpamChecker {
                 return;
             }
 
+            com.hoiaebtl.antispam_call_android.data.entity.PersonalList personalBlock = db.personalListDao().findByPhone(normalizedNumber);
+            if (personalBlock != null) {
+                Log.d(TAG, "Đã tìm thấy trong Danh sách chặn cá nhân!");
+                saveCallLog(db, normalizedNumber, true, 0);
+                result.isSpam = true;
+                result.label = personalBlock.note != null && !personalBlock.note.isEmpty() ? personalBlock.note : "Số bị chặn (cá nhân)";
+                callback.onResult(result);
+                return;
+            }
+
             Log.d(TAG, "Local DB không có, gọi Firebase Fallback...");
             
             // Bước 2: Firebase Fallback (Cả spam_numbers và user_profiles)
