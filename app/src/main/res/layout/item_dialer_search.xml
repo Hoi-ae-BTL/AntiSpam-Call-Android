@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="12dp">
+
+    <ImageView
+        android:id="@+id/iv_dial_icon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@android:drawable/ic_menu_info_details"
+        android:tint="#4CAF50" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_dial_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tên Số Liên Lạc"
+            android:textColor="#212121"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_dial_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="0988777666"
+            android:textColor="#757575"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <!-- Label/Warning Badge -->
+    <TextView
+        android:id="@+id/tv_dial_badge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#E8F5E9"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="4dp"
+        android:text="DANH BẠ"
+        android:textColor="#388E3C"
+        android:textSize="10sp"
+        android:textStyle="bold" />
+</LinearLayout>

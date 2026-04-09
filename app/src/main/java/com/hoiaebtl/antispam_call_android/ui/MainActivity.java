@@ -60,8 +60,8 @@ public class MainActivity extends AppCompatActivity {
                 selectedFragment = new BlacklistFragment();
             } else if (itemId == R.id.navigation_logs) {
                 selectedFragment = new LogsFragment();
-            } else if (itemId == R.id.navigation_stats) {
-                selectedFragment = new StatsFragment();
+            } else if (itemId == R.id.navigation_dialer) {
+                selectedFragment = new DialerFragment();
             }
 
             if (selectedFragment != null) {

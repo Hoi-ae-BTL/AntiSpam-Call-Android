@@ -13,7 +13,7 @@
         android:icon="@android:drawable/ic_delete"
         android:title="Chặn" />
     <item
-        android:id="@+id/navigation_stats"
-        android:icon="@android:drawable/ic_menu_sort_by_size"
-        android:title="Thống kê" />
+        android:id="@+id/navigation_dialer"
+        android:icon="@android:drawable/ic_menu_call"
+        android:title="Bàn phím" />
 </menu>

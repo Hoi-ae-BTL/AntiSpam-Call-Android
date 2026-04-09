@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8F9FA"
+    android:orientation="vertical">
+
+    <!-- Top section: Search results (Smart Dialing) -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_dialer_results"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="8dp"
+        android:clipToPadding="false" />
+
+    <!-- Current input section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:elevation="4dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="24dp"
+        android:paddingVertical="16dp">
+
+        <TextView
+            android:id="@+id/tv_dialed_number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:hint="Sẵn sàng gọi"
+            android:textColor="#333333"
+            android:textSize="36sp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/btn_backspace"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/ic_input_delete"
+            app:tint="#757575" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#E0E0E0" />
+
+    <!-- Numpad section -->
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:columnCount="3"
+        android:paddingBottom="24dp"
+        android:paddingHorizontal="32dp"
+        android:paddingTop="24dp"
+        android:rowCount="4">
+
+        <!-- Row 1 -->
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="16dp"><Button android:id="@+id/btn_1" android:layout_width="80dp" android:layout_height="80dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="1" android:textSize="32sp" android:textColor="#333333" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="16dp"><Button android:id="@+id/btn_2" android:layout_width="80dp" android:layout_height="80dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="2" android:textSize="32sp" android:textColor="#333333" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="16dp"><Button android:id="@+id/btn_3" android:layout_width="80dp" android:layout_height="80dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="3" android:textSize="32sp" android:textColor="#333333" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
+
+        <!-- Row 2 -->
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="16dp"><Button android:id="@+id/btn_4" android:layout_width="80dp" android:layout_height="80dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="4" android:textSize="32sp" android:textColor="#333333" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="16dp"><Button android:id="@+id/btn_5" android:layout_width="80dp" android:layout_height="80dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="5" android:textSize="32sp" android:textColor="#333333" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="16dp"><Button android:id="@+id/btn_6" android:layout_width="80dp" android:layout_height="80dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="6" android:textSize="32sp" android:textColor="#333333" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
+
+        <!-- Row 3 -->
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="16dp"><Button android:id="@+id/btn_7" android:layout_width="80dp" android:layout_height="80dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="7" android:textSize="32sp" android:textColor="#333333" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="16dp"><Button android:id="@+id/btn_8" android:layout_width="80dp" android:layout_height="80dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="8" android:textSize="32sp" android:textColor="#333333" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="16dp"><Button android:id="@+id/btn_9" android:layout_width="80dp" android:layout_height="80dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="9" android:textSize="32sp" android:textColor="#333333" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
+
+        <!-- Row 4 -->
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1"><Button android:id="@+id/btn_star" android:layout_width="80dp" android:layout_height="80dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="*" android:textSize="32sp" android:textColor="#333333" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1"><Button android:id="@+id/btn_0" android:layout_width="80dp" android:layout_height="80dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="0" android:textSize="32sp" android:textColor="#333333" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
+        <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1"><Button android:id="@+id/btn_hash" android:layout_width="80dp" android:layout_height="80dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="#" android:textSize="32sp" android:textColor="#333333" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
+    </GridLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:paddingBottom="24dp"
+        android:paddingTop="8dp">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btn_call"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="#4CAF50"
+            android:src="@android:drawable/ic_menu_call"
+            app:borderWidth="0dp"
+            app:fabSize="normal"
+            app:tint="@android:color/white" />
+    </FrameLayout>
+</LinearLayout>
