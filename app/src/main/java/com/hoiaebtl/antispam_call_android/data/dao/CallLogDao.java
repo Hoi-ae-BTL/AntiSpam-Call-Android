@@ -16,4 +16,10 @@ public interface CallLogDao {
 
     @Query("SELECT * FROM CallLogs WHERE user_id = :userId ORDER BY call_time DESC")
     List<CallLog> getUserLogs(int userId);
+
+    @Query("SELECT COUNT(*) FROM CallLogs WHERE isSpam = 1")
+    int getTotalSpamCalls();
+
+    @Query("SELECT COUNT(*) FROM CallLogs WHERE category_id = :categoryId")
+    int getSpamCountByCategory(int categoryId);
 }

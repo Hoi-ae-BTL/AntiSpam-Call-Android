@@ -46,7 +46,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="1,248"
+                    android:text="0"
                     android:textColor="@color/status_danger"
                     android:textSize="32sp"
                     android:textStyle="bold" />
@@ -62,50 +62,65 @@
             android:textStyle="bold"
             android:textColor="@color/black" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Lừa đảo tài chính"
-            android:textColor="@color/on_surface_variant" />
-        <com.google.android.material.progressindicator.LinearProgressIndicator
+        <LinearLayout
+            android:id="@+id/layout_categories"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:progress="65"
-            app:indicatorColor="@color/status_danger"
-            app:trackThickness="8dp"
-            app:trackCornerRadius="4dp" />
+            android:orientation="vertical"
+            android:layout_marginTop="8dp">
+            <!-- Các danh mục sẽ được thêm hoặc cập nhật tại đây -->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Quảng cáo làm phiền"
-            android:textColor="@color/on_surface_variant" />
-        <com.google.android.material.progressindicator.LinearProgressIndicator
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:progress="25"
-            app:indicatorColor="@color/status_warning"
-            app:trackThickness="8dp"
-            app:trackCornerRadius="4dp" />
+            <TextView
+                android:id="@+id/tv_cat1_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Lừa đảo tài chính"
+                android:textColor="@color/on_surface_variant" />
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/pb_cat1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:progress="0"
+                app:indicatorColor="@color/status_danger"
+                app:trackThickness="8dp"
+                app:trackCornerRadius="4dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Giả mạo cơ quan chức năng"
-            android:textColor="@color/on_surface_variant" />
-        <com.google.android.material.progressindicator.LinearProgressIndicator
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:progress="10"
-            app:indicatorColor="#2196F3"
-            app:trackThickness="8dp"
-            app:trackCornerRadius="4dp" />
+            <TextView
+                android:id="@+id/tv_cat2_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Quảng cáo làm phiền"
+                android:textColor="@color/on_surface_variant" />
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/pb_cat2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:progress="0"
+                app:indicatorColor="@color/status_warning"
+                app:trackThickness="8dp"
+                app:trackCornerRadius="4dp" />
+
+            <TextView
+                android:id="@+id/tv_cat3_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Giả mạo cơ quan chức năng"
+                android:textColor="@color/on_surface_variant" />
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/pb_cat3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:progress="0"
+                app:indicatorColor="#2196F3"
+                app:trackThickness="8dp"
+                app:trackCornerRadius="4dp" />
+        </LinearLayout>
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
