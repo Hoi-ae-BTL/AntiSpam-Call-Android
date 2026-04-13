@@ -188,11 +188,7 @@ public class HomeFragment extends Fragment {
                     .set(data, SetOptions.merge())
                     .addOnSuccessListener(aVoid -> {
                         Toast.makeText(getContext(), "Cảm ơn bạn đã báo cáo vì cộng đồng!", Toast.LENGTH_SHORT).show();
-                        // Cache luôn vào Local Room
-                        executorService.execute(() -> {
-                            AppDatabase localDb = AppDatabase.getInstance(requireContext());
-                            localDb.spamNumberDao().insert(new SpamNumber(phone, 1, 0, 0, "", "", ""));
-                        });
+                        // Không chèn trực tiếp vào Local DB nữa để không phá vỡ logic Trọng Số của hệ thống
                     });
         });
         builder.setNegativeButton("Hủy", (dialog, which) -> dialog.cancel());
@@ -230,11 +226,19 @@ public class HomeFragment extends Fragment {
             data.put("name", name);
             data.put("company", comp);
             data.put("verified", true);
+            data.put("report_count", FieldValue.increment(1));
 
             db.collection("user_profiles").document(phone)
                     .set(data, SetOptions.merge())
                     .addOnSuccessListener(aVoid -> {
                         Toast.makeText(getContext(), "Đã cập nhật danh tính trên toàn hệ thống!", Toast.LENGTH_SHORT).show();
+                        executorService.execute(() -> {
+                            AppDatabase localDb = AppDatabase.getInstance(requireContext());
+                            SpamNumber spam = localDb.spamNumberDao().findByPhone(phone);
+                            if (spam != null) {
+                                localDb.spamNumberDao().delete(spam);
+                            }
+                        });
                     });
         });
         builder.setNegativeButton("Hủy", (dialog, which) -> dialog.cancel());

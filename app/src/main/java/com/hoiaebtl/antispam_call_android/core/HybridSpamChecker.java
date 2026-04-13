@@ -11,6 +11,9 @@ import android.util.Log;
 
 import androidx.core.content.ContextCompat;
 
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hoiaebtl.antispam_call_android.data.database.AppDatabase;
 import com.hoiaebtl.antispam_call_android.data.entity.CallLog;
@@ -85,55 +88,55 @@ public class HybridSpamChecker {
             Log.d(TAG, "Local DB không có, gọi Firebase Fallback...");
             
             // Bước 2: Firebase Fallback (Cả spam_numbers và user_profiles)
-            firestore.collection("spam_numbers").document(normalizedNumber).get()
-                .addOnSuccessListener(document -> {
-                    if (document.exists()) {
-                        Log.d(TAG, "Tìm thấy trên Firebase: Là Spam!");
-                        int catId = document.getLong("primary_category_id") != null ? document.getLong("primary_category_id").intValue() : 0;
-                        int rCount = document.getLong("report_count") != null ? document.getLong("report_count").intValue() : 1;
+            Task<DocumentSnapshot> spamTask = firestore.collection("spam_numbers").document(normalizedNumber).get();
+            Task<DocumentSnapshot> safeTask = firestore.collection("user_profiles").document(normalizedNumber).get();
+
+            try {
+                Tasks.await(Tasks.whenAllComplete(spamTask, safeTask));
+                
+                DocumentSnapshot spamDoc = spamTask.isSuccessful() ? spamTask.getResult() : null;
+                DocumentSnapshot safeDoc = safeTask.isSuccessful() ? safeTask.getResult() : null;
+
+                boolean isSpamInDb = spamDoc != null && spamDoc.exists();
+                boolean isSafeInDb = safeDoc != null && safeDoc.exists();
+
+                long spamReports = isSpamInDb && spamDoc.contains("report_count") ? spamDoc.getLong("report_count") : (isSpamInDb ? 1 : 0);
+                long safeReports = isSafeInDb && safeDoc.contains("report_count") ? safeDoc.getLong("report_count") : (isSafeInDb ? 1 : 0);
+
+                if (isSpamInDb || isSafeInDb) {
+                    if (spamReports > safeReports) {
+                        Log.d(TAG, "Tìm thấy trên Firebase: Trọng số Spam (" + spamReports + ") vượt Danh Tính (" + safeReports + ")");
+                        int catId = spamDoc.getLong("primary_category_id") != null ? spamDoc.getLong("primary_category_id").intValue() : 0;
                         executorService.execute(() -> {
                             saveCallLog(db, normalizedNumber, true, catId);
-                            SpamNumber newSpam = new SpamNumber(normalizedNumber, catId, rCount, 0, "", "", "");
+                            SpamNumber newSpam = new SpamNumber(normalizedNumber, catId, (int)spamReports, 0, "", "", "");
                             db.spamNumberDao().insert(newSpam);
                         });
                         result.isSpam = true;
-                        result.reportCount = rCount;
-                        result.label = document.getString("label") != null ? document.getString("label") : "Cảnh báo Lừa đảo";
+                        result.reportCount = (int)spamReports;
+                        result.label = spamDoc.getString("label") != null ? spamDoc.getString("label") : "Cảnh báo Lừa đảo";
                         callback.onResult(result);
-                    } else {
-                        // Nếu không phải Spam, kiểm tra xem có phải Người Giao Hàng/Tài xế trong user_profiles không
-                        checkUserProfile(normalizedNumber, db, callback, result);
+                    } else if (isSafeInDb && safeReports >= spamReports) {
+                        Log.d(TAG, "Tìm thấy trên Firebase: Trọng số An Toàn (" + safeReports + ") vượt Spam (" + spamReports + ")");
+                        result.isVerifiedSafe = true;
+                        result.name = safeDoc.getString("name");
+                        result.label = safeDoc.getString("company");
+                        if (result.name == null) result.name = "Người dùng xác thực";
+                        if (result.label == null) result.label = "Đã xác thực danh tính";
+                        callback.onResult(result);
                     }
-                })
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "Firebase truy xuất lỗi: " + e.getMessage());
-                    executorService.execute(() -> saveCallLog(db, normalizedNumber, false, 0));
-                    callback.onResult(result);
-                });
-        });
-    }
-
-    private void checkUserProfile(String normalizedNumber, AppDatabase db, CallerResultCallback callback, CallerInfo result) {
-        firestore.collection("user_profiles").document(normalizedNumber).get()
-            .addOnSuccessListener(doc -> {
-                if (doc.exists()) {
-                    Log.d(TAG, "Tìm thấy trên Firebase: Số người dùng An toàn!");
-                    result.isVerifiedSafe = true;
-                    result.name = doc.getString("name");
-                    result.label = doc.getString("company");
-                    if (result.name == null) result.name = "Người dùng xác thực";
-                    if (result.label == null) result.label = "Đã xác thực danh tính";
-                    callback.onResult(result);
                 } else {
                     Log.d(TAG, "Số ngoại vi hoàn toàn mờ xỉn (Không Rác cũng không VIP).");
                     executorService.execute(() -> saveCallLog(db, normalizedNumber, false, 0));
                     callback.onResult(result);
                 }
-            })
-            .addOnFailureListener(e -> {
+
+            } catch (Exception e) {
+                Log.e(TAG, "Firebase truy xuất lỗi: " + e.getMessage());
                 executorService.execute(() -> saveCallLog(db, normalizedNumber, false, 0));
                 callback.onResult(result);
-            });
+            }
+        });
     }
 
     private boolean isNumberInContacts(String number) {
