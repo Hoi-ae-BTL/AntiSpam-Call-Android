@@ -23,6 +23,8 @@ import androidx.work.WorkManager;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import java.util.concurrent.TimeUnit;
 import com.hoiaebtl.antispam_call_android.data.worker.SpamSyncWorker;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import com.hoiaebtl.antispam_call_android.R;
 import com.hoiaebtl.antispam_call_android.core.CallListenService;
@@ -37,6 +39,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        // Kiểm tra phiên đăng nhập (Bảo mật 2 lớp)
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser == null) {
+            startActivity(new Intent(this, AuthActivity.class));
+            finish();
+            return;
+        }
         
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
