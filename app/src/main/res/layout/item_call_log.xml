@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="16dp"
-    android:layout_marginVertical="8dp"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="0dp"
-    app:strokeColor="@color/surface_variant"
-    app:strokeWidth="1dp">
+    android:background="?attr/selectableItemBackground"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,12 +13,10 @@
         android:orientation="horizontal"
         android:padding="16dp">
 
-        <!-- Icon trạng thái cuộc gọi -->
         <FrameLayout
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:background="@drawable/ic_launcher_background"
-            android:backgroundTint="@color/label_spam_bg">
+            android:background="@drawable/bg_numpad_key">
 
             <ImageView
                 android:id="@+id/img_call_type_icon"
@@ -73,4 +67,10 @@
             android:textStyle="bold" />
 
     </LinearLayout>
-</com.google.android.material.card.MaterialCardView>
+    
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="20dp"
+        android:background="#0A000000" />
+</LinearLayout>
