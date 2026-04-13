@@ -4,29 +4,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_light">
+    android:background="#F8F9FA">
 
     <TextView
         android:id="@+id/tv_logs_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:text="Nhật ký cuộc gọi"
-        android:textColor="@color/text_primary"
-        android:textSize="20sp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="28dp"
+        android:text="NHẬT KÝ CUỘC GỌI"
+        android:textColor="#757575"
+        android:textSize="12sp"
         android:textStyle="bold"
+        android:letterSpacing="0.05"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_call_logs"
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:clipToPadding="false"
-        android:paddingBottom="20dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="24dp"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="2dp"
+        app:strokeWidth="0dp"
+        app:cardBackgroundColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_logs_title"
-        tools:listitem="@layout/item_call_log" />
+        app:layout_constraintTop_toBottomOf="@id/tv_logs_title">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_call_logs"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            tools:listitem="@layout/item_call_log" />
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

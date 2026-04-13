@@ -10,49 +10,72 @@
         android:id="@+id/tv_blacklist_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:text="Danh sách chặn"
-        android:textColor="@color/text_primary"
-        android:textSize="20sp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="28dp"
+        android:text="DANH SÁCH CHẶN"
+        android:textColor="#757575"
+        android:textSize="12sp"
         android:textStyle="bold"
+        android:letterSpacing="0.05"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_blacklist"
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:clipToPadding="false"
-        android:paddingBottom="80dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="24dp"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="2dp"
+        app:strokeWidth="0dp"
+        app:cardBackgroundColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_blacklist_title"
-        tools:listitem="@layout/item_blacklist" />
+        app:layout_constraintTop_toBottomOf="@id/tv_blacklist_title">
 
-    <TextView
-        android:id="@+id/tv_empty_blacklist"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Bạn chưa chặn số nào"
-        android:textColor="@color/text_secondary"
-        android:textSize="16sp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_blacklist_title" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_blacklist"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            tools:listitem="@layout/item_blacklist" />
+
+        <LinearLayout
+            android:id="@+id/tv_empty_blacklist"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+            
+            <ImageView
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:src="@android:drawable/ic_dialog_info"
+                app:tint="#E0E0E0" />
+                
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Chưa có ai bị chặn"
+                android:textColor="#BDBDBD"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add_blacklist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="24dp"
+        android:layout_margin="32dp"
         android:clickable="true"
         android:focusable="true"
         android:src="@android:drawable/ic_input_add"
-        app:backgroundTint="@color/colorPrimary"
+        app:backgroundTint="#FF3B30"
+        app:tint="#FFFFFF"
+        app:elevation="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:tint="@android:color/white" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
