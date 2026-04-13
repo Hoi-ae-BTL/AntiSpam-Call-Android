@@ -9,12 +9,39 @@ import android.telecom.TelecomManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import com.hoiaebtl.antispam_call_android.data.database.AppDatabase;
+import com.hoiaebtl.antispam_call_android.data.entity.CallLog;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 /**
  * Legacy Fallback: Dùng riêng cho các máy thuộc hệ điều hành Android 9 trở xuống.
  * Từ Android 10 trở lên, AppCallScreeningService sẽ gánh vác xử lý chính.
  */
 public class CallReceiver extends BroadcastReceiver {
     private static final String TAG = "CallReceiver_Legacy";
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
+
+    private void saveCallLogLocally(Context context, String number, boolean isSpam, int categoryId) {
+        executorService.execute(() -> {
+            try {
+                AppDatabase db = AppDatabase.getInstance(context);
+                CallLog log = new CallLog();
+                log.setPhoneNumber(number);
+                log.setCallTime(System.currentTimeMillis());
+                log.setSpam(isSpam);
+                log.setUserId(1); // Mặc định
+                if (isSpam) {
+                    log.setCategoryId(categoryId);
+                }
+                db.callLogDao().insert(log);
+                Log.d(TAG, "Đã lưu lịch sử cuộc gọi thật (Legacy): SPAM=" + isSpam);
+            } catch (Exception e) {
+                Log.e(TAG, "Lỗi khi lưu lịch sử: " + e.getMessage());
+            }
+        });
+    }
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -31,6 +58,9 @@ public class CallReceiver extends BroadcastReceiver {
                     HybridSpamChecker checker = new HybridSpamChecker(context);
                     
                     checker.checkCallerInfo(normalizedNumber, info -> {
+                        // Ghi nhận thành một cuộc gọi thực tế đi vào lịch sử
+                        saveCallLogLocally(context, normalizedNumber, info.isSpam, info.categoryId);
+                        
                         if (info.isSpam) {
                             Log.w(TAG, "CẢNH BÁO: Số lừa đảo " + normalizedNumber);
                             
@@ -39,6 +69,7 @@ public class CallReceiver extends BroadcastReceiver {
 
                             if (isAutoBlockEnabled) {
                                 endCall(context); // Dùng TelecomManager (dễ lỗi trên Android 10+)
+                                // Bỏ đi việc hiện báo cáo Overlay để không làm phiền người dùng
                             } else {
                                 checker.showOverlay(incomingNumber, info);
                             }

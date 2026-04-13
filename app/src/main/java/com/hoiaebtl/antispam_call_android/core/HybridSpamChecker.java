@@ -16,7 +16,6 @@ import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hoiaebtl.antispam_call_android.data.database.AppDatabase;
-import com.hoiaebtl.antispam_call_android.data.entity.CallLog;
 import com.hoiaebtl.antispam_call_android.data.entity.SpamNumber;
 
 import java.util.concurrent.ExecutorService;
@@ -34,6 +33,7 @@ public class HybridSpamChecker {
         public String name;
         public String label;
         public int reportCount;
+        public int categoryId;
         
         public boolean hasData() { return isSpam || isVerifiedSafe; }
     }
@@ -68,9 +68,9 @@ public class HybridSpamChecker {
             
             if (spam != null) {
                 Log.d(TAG, "Đã tìm thấy trong Local DB: Thằng này là Spam!");
-                saveCallLog(db, normalizedNumber, true, spam.primary_category_id);
                 result.isSpam = true;
                 result.label = "Spam/Lừa đảo (Cộng đồng)";
+                result.categoryId = spam.primary_category_id;
                 callback.onResult(result);
                 return;
             }
@@ -78,7 +78,6 @@ public class HybridSpamChecker {
             com.hoiaebtl.antispam_call_android.data.entity.PersonalList personalBlock = db.personalListDao().findByPhone(normalizedNumber);
             if (personalBlock != null) {
                 Log.d(TAG, "Đã tìm thấy trong Danh sách chặn cá nhân!");
-                saveCallLog(db, normalizedNumber, true, 0);
                 result.isSpam = true;
                 result.label = personalBlock.note != null && !personalBlock.note.isEmpty() ? personalBlock.note : "Số bị chặn (cá nhân)";
                 callback.onResult(result);
@@ -100,20 +99,26 @@ public class HybridSpamChecker {
                 boolean isSpamInDb = spamDoc != null && spamDoc.exists();
                 boolean isSafeInDb = safeDoc != null && safeDoc.exists();
 
-                long spamReports = isSpamInDb && spamDoc.contains("report_count") ? spamDoc.getLong("report_count") : (isSpamInDb ? 1 : 0);
+                long spamReports = 0;
+                if (isSpamInDb) {
+                    if (spamDoc.contains("report_count")) {
+                        spamReports = spamDoc.getLong("report_count");
+                    } else if (spamDoc.contains("total_reports")) {
+                        spamReports = spamDoc.getLong("total_reports");
+                    } else {
+                        spamReports = 1;
+                    }
+                }
+                
                 long safeReports = isSafeInDb && safeDoc.contains("report_count") ? safeDoc.getLong("report_count") : (isSafeInDb ? 1 : 0);
 
                 if (isSpamInDb || isSafeInDb) {
                     if (spamReports > safeReports) {
                         Log.d(TAG, "Tìm thấy trên Firebase: Trọng số Spam (" + spamReports + ") vượt Danh Tính (" + safeReports + ")");
                         int catId = spamDoc.getLong("primary_category_id") != null ? spamDoc.getLong("primary_category_id").intValue() : 0;
-                        executorService.execute(() -> {
-                            saveCallLog(db, normalizedNumber, true, catId);
-                            SpamNumber newSpam = new SpamNumber(normalizedNumber, catId, (int)spamReports, 0, "", "", "");
-                            db.spamNumberDao().insert(newSpam);
-                        });
                         result.isSpam = true;
                         result.reportCount = (int)spamReports;
+                        result.categoryId = catId;
                         result.label = spamDoc.getString("label") != null ? spamDoc.getString("label") : "Cảnh báo Lừa đảo";
                         callback.onResult(result);
                     } else if (isSafeInDb && safeReports >= spamReports) {
@@ -127,13 +132,11 @@ public class HybridSpamChecker {
                     }
                 } else {
                     Log.d(TAG, "Số ngoại vi hoàn toàn mờ xỉn (Không Rác cũng không VIP).");
-                    executorService.execute(() -> saveCallLog(db, normalizedNumber, false, 0));
                     callback.onResult(result);
                 }
 
             } catch (Exception e) {
                 Log.e(TAG, "Firebase truy xuất lỗi: " + e.getMessage());
-                executorService.execute(() -> saveCallLog(db, normalizedNumber, false, 0));
                 callback.onResult(result);
             }
         });
@@ -165,18 +168,6 @@ public class HybridSpamChecker {
         return null;
     }
 
-    private void saveCallLog(AppDatabase db, String number, boolean isSpam, int categoryId) {
-        CallLog log = new CallLog();
-        log.setPhoneNumber(number);
-        log.setCallTime(System.currentTimeMillis());
-        log.setSpam(isSpam);
-        log.setUserId(1); // Mặc định
-        if (isSpam) {
-            log.setCategoryId(categoryId);
-        }
-        db.callLogDao().insert(log);
-    }
-    
     public void showOverlay(String number, CallerInfo info) {
         Intent overlayIntent = new Intent(context, OverlayService.class);
         overlayIntent.putExtra("spam_number", number);
