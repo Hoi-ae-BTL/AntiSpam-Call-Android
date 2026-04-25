@@ -1,32 +1,63 @@
 # AntiSpam-Call-Android
 
-Dự án phát triển ứng dụng nhận diện và chặn cuộc gọi lừa đảo/làm phiền trên nền tảng Android. Bài tập lớn môn học Phát triển Ứng dụng Di động.
+Ứng dụng Android hỗ trợ nhận diện, cảnh báo và chặn các cuộc gọi lừa đảo hoặc làm phiền.  
+Dự án bài tập lớn học phần "Lập trình thiết bị di động".
 
-## 🚀 Tính năng chính
+## Tính Năng Chính
 
-- **Nhận diện cuộc gọi:** Tự động tra cứu số điện thoại gọi đến theo thời gian thực.
-- **Cảnh báo thông minh (Overlay):** Hiển thị cửa sổ cảnh báo đè lên màn hình gọi điện nếu phát hiện số có dấu hiệu spam.
-- **Tự động chặn (Auto-block):** Tự động ngắt kết nối với các số điện thoại nằm trong danh sách đen (Blacklist) hoặc có điểm tín nhiệm cực thấp.
-- **Cơ sở dữ liệu cục bộ & Đám mây:** Quản lý quy tắc chặn bằng Room Database và đồng bộ dữ liệu cộng đồng.
+- Đăng nhập bằng số điện thoại và OTP
+- Nhận diện cuộc gọi theo thời gian thực
+- Hiển thị cảnh báo bằng overlay
+- Tự động chặn cuộc gọi spam
+- Quản lý danh sách chặn cá nhân
+- Tra cứu số điện thoại từ dữ liệu cộng đồng
+- Báo cáo số spam và xác thực số an toàn
+- Lưu nhật ký cuộc gọi
+- Hiển thị thống kê cơ bản
+- Đồng bộ dữ liệu nền từ Firebase về local database
 
-## 🛠️ Công nghệ sử dụng
+## Công Nghệ Sử Dụng
 
-- **Ngôn ngữ:** Java
-- **Minimum SDK:** API 26 (Android 8.0 Oreo)
+- **Ngôn Ngữ:** Java
+- **Min SDK:** API 26
 - **Target SDK:** API 34
-- **Kiến trúc:** Clean Architecture (Core, Data, UI, Domain)
-- **Database:** SQLite (thông qua Room Persistence Library)
+- **Giao Diện:** XML, Material Components, View Binding
+- **Điều Hướng:** Activity, Fragment, BottomNavigationView
+- **Cơ Sở Dữ Liệu Cục Bộ:** Room Database
+- **Dữ Liệu Trực Tuyến:** Firebase Firestore
+- **Xác Thực:** Firebase Authentication
+- **Tác Vụ Nền:** WorkManager
+- **Lưu Thiết Lập:** SharedPreferences
+- **Hiển Thị Danh Sách:** RecyclerView
 
-## 👥 Nhóm phát triển
+## Cấu Trúc Dự Án
+- ui/      Giao diện và màn hình chức năng
+- core/    Xử lý cuộc gọi, nhận diện spam, overlay
+- data/    Database, DAO, entity, worker đồng bộ
 
-1. **Thế (Leader):** Xử lý Core System (CallReceiver, Service) & Quản lý dự án.
-2. **Hưng:** Thiết kế Database Schema & Tích hợp Room DB.
-3. **Hà:** Thiết kế UI/UX & Main Activity.
-4. **Tuấn:** Phát triển module Overlay Alert Window.
+## Hướng Dẫn Chạy Dự Án
+- Clone dự án: git clone https://github.com/Hoi-ae-BTL/AntiSpam-Call-Android.git
+- Mở bằng Android Studio
+- Chờ Gradle Sync hoàn tất
+- Cấu hình Firebase nếu cần (google-services.json)
+- Chạy trên máy ảo hoặc thiết bị thật
+- Cấp đầy đủ quyền hệ thống khi ứng dụng yêu cầu
+## Quyền Cần Cấp
+- READ_PHONE_STATE
+- READ_CALL_LOG
+- ANSWER_PHONE_CALLS
+- READ_CONTACTS
+- Overlay Permission
+- Call Screening Role (nếu thiết bị hỗ trợ)
+## Lưu Ý
+Xác thực OTP hiện chủ yếu được kiểm thử bằng số điện thoại thử nghiệm và mã OTP thiết lập sẵn trên Firebase.
+Một số chức năng liên quan đến cuộc gọi và overlay hoạt động tốt hơn trên thiết bị thật.
+Kết quả nhận diện phụ thuộc vào dữ liệu cục bộ, dữ liệu cộng đồng và trạng thái quyền hệ thống.
 
-## ⚙️ Hướng dẫn cài đặt
-
-1. Clone dự án về máy: `git clone https://github.com/Hoi-ae-BTL/AntiSpam-Call-Android.git`
-2. Mở dự án bằng Android Studio (Bản mới nhất).
-3. Đợi Gradle Sync thành công.
-4. Chạy ứng dụng trên máy ảo hoặc thiết bị thật (Yêu cầu cấp quyền quản lý cuộc gọi ở lần chạy đầu tiên).
+## Nhóm Phát Triển
+- Thế (Leader): Core System, xử lý cuộc gọi, quản lý dự án
+- Hưng: Database Schema, Room Database
+- Hà: UI/UX, Main Activity, giao diện chính
+- Tuấn: Overlay Alert Window
+## Mục Đích
+Dự án được thực hiện phục vụ mục đích học tập và nghiên cứu trong khuôn khổ môn học.
