@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8F9FA"
+    android:orientation="vertical">
+
+    <!-- Phần Kết Quả Tra Cuốn / Tìm Kiếm Danh Bạ -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_dialer_results"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="8dp"
+        android:clipToPadding="false" />
+
+    <!-- Khu vực nhập liệu cực thanh lịch -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="24dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="16dp">
+
+        <TextView
+            android:id="@+id/tv_dialed_number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:hint=""
+            android:textColor="#333333"
+            android:textSize="36sp"
+            android:letterSpacing="0.05"
+            android:fontFamily="sans-serif-medium" />
+
+        <ImageButton
+            android:id="@+id/btn_backspace"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/ic_input_delete"
+            app:tint="#A0A0A0" />
+    </LinearLayout>
+
+    <!-- Bàn Phím Call Khu vực Trắng Nguyên Khối Đổ Bóng -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="24dp"
+        app:cardCornerRadius="32dp"
+        app:cardElevation="6dp"
+        app:cardBackgroundColor="#FFFFFF"
+        app:strokeWidth="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="20dp"
+            android:paddingBottom="24dp">
+
+            <!-- Phím Số Lược Bỏ Bo Viền Rườm Rà -->
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="3"
+                android:paddingHorizontal="12dp"
+                android:rowCount="4">
+
+                <!-- Row 1 -->
+                <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp"><Button android:id="@+id/btn_1" android:layout_width="76dp" android:layout_height="76dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="1\n " android:textSize="28sp" android:textColor="#424242" android:fontFamily="sans-serif-light" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
+                <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp"><Button android:id="@+id/btn_2" android:layout_width="76dp" android:layout_height="76dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="2\nABC" android:textSize="26sp" android:textColor="#424242" android:fontFamily="sans-serif-light" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
+                <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp"><Button android:id="@+id/btn_3" android:layout_width="76dp" android:layout_height="76dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="3\nDEF" android:textSize="26sp" android:textColor="#424242" android:fontFamily="sans-serif-light" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
+
+                <!-- Row 2 -->
+                <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp"><Button android:id="@+id/btn_4" android:layout_width="76dp" android:layout_height="76dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="4\nGHI" android:textSize="26sp" android:textColor="#424242" android:fontFamily="sans-serif-light" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
+                <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp"><Button android:id="@+id/btn_5" android:layout_width="76dp" android:layout_height="76dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="5\nJKL" android:textSize="26sp" android:textColor="#424242" android:fontFamily="sans-serif-light" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
+                <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp"><Button android:id="@+id/btn_6" android:layout_width="76dp" android:layout_height="76dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="6\nMNO" android:textSize="26sp" android:textColor="#424242" android:fontFamily="sans-serif-light" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
+
+                <!-- Row 3 -->
+                <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp"><Button android:id="@+id/btn_7" android:layout_width="76dp" android:layout_height="76dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="7\nPQRS" android:textSize="24sp" android:textColor="#424242" android:fontFamily="sans-serif-light" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
+                <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp"><Button android:id="@+id/btn_8" android:layout_width="76dp" android:layout_height="76dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="8\nTUV" android:textSize="26sp" android:textColor="#424242" android:fontFamily="sans-serif-light" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
+                <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp"><Button android:id="@+id/btn_9" android:layout_width="76dp" android:layout_height="76dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="9\nWXYZ" android:textSize="24sp" android:textColor="#424242" android:fontFamily="sans-serif-light" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
+
+                <!-- Row 4 -->
+                <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp"><Button android:id="@+id/btn_star" android:layout_width="76dp" android:layout_height="76dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="*\n " android:textSize="28sp" android:textColor="#A0A0A0" android:fontFamily="sans-serif-light" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
+                <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp"><Button android:id="@+id/btn_0" android:layout_width="76dp" android:layout_height="76dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="0\n+" android:textSize="26sp" android:textColor="#424242" android:fontFamily="sans-serif-light" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
+                <FrameLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:layout_marginBottom="8dp"><Button android:id="@+id/btn_hash" android:layout_width="76dp" android:layout_height="76dp" android:layout_gravity="center" android:background="@drawable/bg_numpad_key" android:text="#\n " android:textSize="28sp" android:textColor="#A0A0A0" android:fontFamily="sans-serif-light" style="?android:attr/borderlessButtonStyle"/></FrameLayout>
+            </GridLayout>
+
+            <!-- Nút Call Gradient -->
+            <ImageButton
+                android:id="@+id/btn_call"
+                android:layout_width="160dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_btn_call_gradient"
+                android:src="@android:drawable/ic_menu_call"
+                app:tint="#FFFFFF"
+                android:scaleType="centerInside"
+                android:elevation="8dp" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+</LinearLayout>

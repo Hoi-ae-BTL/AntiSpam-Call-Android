@@ -1,0 +1,13 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.AntiSpamCallAndroid" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/colorAccent</item>
+        <item name="android:statusBarColor">@color/colorPrimary</item>
+        <item name="android:windowBackground">@color/background_light</item>
+    </style>
+
+    <style name="Theme.AntiSpamCallAndroid" parent="Base.Theme.AntiSpamCallAndroid" />
+</resources>

@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8F9FA"
+    android:padding="24dp">
+
+    <!-- Header -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/img_logo"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="64dp"
+        app:cardBackgroundColor="#E6F0FF"
+        app:cardCornerRadius="40dp"
+        app:cardElevation="0dp"
+        app:strokeWidth="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:src="@android:drawable/ic_menu_call"
+            app:tint="#005BFF" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/tv_auth_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="SafeCall Security"
+        android:textColor="#333333"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/img_logo" />
+
+    <TextView
+        android:id="@+id/tv_auth_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="Xác thực danh tính để chung tay làm sạch không gian viễn thông."
+        android:textColor="#757575"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_auth_title" />
+
+    <!-- ==== Bước 1: NHẬP SỐ ĐIỆN THOẠI ==== -->
+    <LinearLayout
+        android:id="@+id/layout_step_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:orientation="vertical"
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@id/tv_auth_desc">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="#FFFFFF"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            app:strokeWidth="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="+84"
+                    android:textColor="#424242"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginHorizontal="12dp"
+                    android:background="#E0E0E0" />
+
+                <EditText
+                    android:id="@+id/et_phone_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:hint="Số điện thoại"
+                    android:inputType="phone"
+                    android:paddingVertical="12dp"
+                    android:textColor="#333333"
+                    android:textSize="16sp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <Button
+            android:id="@+id/btn_send_otp"
+            style="@style/Widget.Material3.Button"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="#005BFF"
+            android:text="Gửi mã OTP"
+            android:textSize="16sp"
+            app:cornerRadius="16dp" />
+    </LinearLayout>
+
+    <!-- ==== Bước 2: NHẬP MÃ OTP ==== -->
+    <LinearLayout
+        android:id="@+id/layout_step_otp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/tv_auth_desc">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="#FFFFFF"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            app:strokeWidth="0dp">
+
+            <EditText
+                android:id="@+id/et_otp_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:gravity="center"
+                android:hint="Nhập 6 số OTP"
+                android:inputType="number"
+                android:letterSpacing="0.2"
+                android:maxLength="6"
+                android:paddingVertical="20dp"
+                android:textColor="#333333"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <Button
+            android:id="@+id/btn_verify_otp"
+            style="@style/Widget.Material3.Button"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="#4CAF50"
+            android:text="Xác thực Đăng nhập"
+            android:textSize="16sp"
+            app:cornerRadius="16dp" />
+            
+        <TextView
+            android:id="@+id/tv_resend_otp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:padding="8dp"
+            android:text="Thay đổi số điện thoại"
+            android:textColor="#005BFF"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Error View -->
+    <TextView
+        android:id="@+id/tv_auth_error"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:textColor="#E53935"
+        android:textSize="14sp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/layout_step_phone" />
+
+    <ProgressBar
+        android:id="@+id/progress_auth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_auth_error" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
